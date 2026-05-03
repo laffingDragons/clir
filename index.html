@@ -1,547 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CLIR — Eliminate 50% of Repetitive Work in 60 Days</title>
-  <meta name="description" content="CLIR deploys GenAI across testing, debugging, and documentation to eliminate 50% of repetitive engineering work in 60 days." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
- <link rel="stylesheet" href="style.css">
- <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIR — Eliminate 50% of Repetitive Work in 60 Days</title>
+<meta name="description" content="CLIR deploys GenAI across testing, debugging, and documentation to eliminate 50% of repetitive engineering work in 60 days."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
 
-<!-- NAV -->
 <nav id="mainNav">
   <a class="nav-logo" href="#" onclick="showPage('home')">
-    <div class="logo-icon"><img width="24px" src="./assets/images/clir-logo.png" alt="" srcset=""></div>
-    Cli R
+        <div class="logo-icon"><img width="24px" src="./assets/images/clir-logo.png" alt="" srcset=""></div>
+        <div class="logo-text">Cli R</div>
   </a>
   <ul class="nav-links">
-    <li><a href="#" onclick="scrollTo_('#problem')">Problem</a></li>
-    <li><a href="#" onclick="scrollTo_('#solution')">Solution</a></li>
-    <li><a href="#" onclick="scrollTo_('#services')">Services</a></li>
+    <li><a href="#" onclick="go('#problem')">Problem</a></li>
+    <li><a href="#" onclick="go('#solution')">Solution</a></li>
+    <li><a href="#" onclick="go('#services')">Services</a></li>
     <li><a href="#" onclick="showPage('contact')">Contact</a></li>
-    <li><a href="#" class="nav-cta" onclick="scrollTo_('#contact-form')">Book a Call →</a></li>
+    <li><a href="#" class="nav-cta" onclick="go('#cform')">Book a call</a></li>
   </ul>
-  <button class="menu-btn" onclick="toggleMobile()">☰</button>
+  <button class="mobile-btn" onclick="toggleNav()">☰</button>
 </nav>
 
-<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<!-- HOME -->
 <div id="page-home" class="page active">
 
-<!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">
-    <span class="dot"></span>
-    GenAI Execution for Engineering Teams
+  <div class="hero-kicker r"><span class="kicker-dot"></span>GenAI execution partner for engineering teams</div>
+  <h1 class="r">Eliminate <em>50%</em><br>of repetitive work<br>in 60 days</h1>
+  <p class="hero-sub r">Deploy GenAI across testing, debugging, and documentation — without disrupting your workflow.</p>
+  <div class="cta-row r">
+    <a href="#" class="btn-dark" onclick="go('#cform')">Book a free strategy call</a>
+    <a href="#" class="btn-ghost">Download the 60-day playbook</a>
   </div>
-  <h1>Eliminate <em>50%</em> of<br>Repetitive Work<br>in 60 Days</h1>
-  <p class="hero-sub">Deploy GenAI across testing, debugging, and documentation — without disrupting your workflow or needing a data science team.</p>
-  <div class="hero-ctas">
-    <a href="#" class="btn-primary" onclick="scrollTo_('#contact-form')">Book a Free Strategy Call →</a>
-    <a href="#" class="btn-secondary">Download 60-Day Playbook ↓</a>
-  </div>
-  <div class="hero-visual">
-    <div class="workflow-card">
-      <div class="wf-item">
-        <div class="wf-icon">🔁</div>
-        <div class="wf-label">Before CLIR</div>
-        <div class="wf-val">40–60%</div>
-        <div class="wf-desc">of sprint time lost to repetition</div>
-      </div>
-      <div class="wf-item">
-        <div class="wf-icon">⚡</div>
-        <div class="wf-label">CLIR Deploy</div>
-        <div class="wf-val">60 Days</div>
-        <div class="wf-desc">from audit to measurable results</div>
-      </div>
-      <div class="wf-item">
-        <div class="wf-icon">📈</div>
-        <div class="wf-label">After CLIR</div>
-        <div class="wf-val">50%↓</div>
-        <div class="wf-desc">reduction in repetitive work</div>
-      </div>
-    </div>
+  <div class="hero-metrics r">
+    <div class="hm"><div class="hm-num">40–60%</div><div class="hm-lbl">of sprint time lost to repetition</div></div>
+    <div class="hm"><div class="hm-num">60 days</div><div class="hm-lbl">from audit to measurable results</div></div>
+    <div class="hm"><div class="hm-num">50%↓</div><div class="hm-lbl">reduction in repetitive work</div></div>
   </div>
 </section>
 
-<!-- PROBLEM -->
-<section id="problem" style="max-width:1100px;margin:0 auto;padding:80px 40px;">
-  <div class="problem">
-    <div class="section-tag reveal">The Problem</div>
-    <h2 class="reveal">Engineering Teams Are Wasting<br>40–60% of Their Time</h2>
-    <p class="section-sub reveal">Every sprint, skilled engineers spend hours on tasks that a well-configured AI pipeline could handle. That's capacity leaking silently.</p>
-    <div class="stats-grid reveal">
-      <div class="stat-card">
-        <div class="stat-num">3.2h</div>
-        <div class="stat-label">⚙️ Writing repetitive test cases — every single day, per engineer</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">47%</div>
-        <div class="stat-label">🐛 Of debugging time spent on issues that recur across sprints</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">8h/wk</div>
-        <div class="stat-label">📝 Lost per developer to writing and maintaining documentation</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">$180K</div>
-        <div class="stat-label">💸 Annual cost per 5-person team from preventable repetitive work</div>
-      </div>
-    </div>
-  </div>
-</section>
+<hr class="divider">
 
-<!-- SOLUTION -->
-<section id="solution" style="max-width:1100px;margin:0 auto;padding:80px 40px;">
-  <div class="section-tag reveal">The Fix</div>
-  <h2 class="reveal">How CLIR Fixes This</h2>
-  <p class="section-sub reveal">We identify the exact workflows eating your team's time, then deploy purpose-built GenAI pipelines that run quietly in the background.</p>
-  <div class="solution-grid reveal">
-    <div class="sol-card">
-      <div class="sol-icon">🧪</div>
-      <h3>AI-Powered Testing</h3>
-      <p>Automatically generate, categorize, and execute test cases. Edge cases included. Your engineers review results, not write boilerplate.</p>
-      <div class="sol-metric">→ 45% faster test creation</div>
-    </div>
-    <div class="sol-card">
-      <div class="sol-icon">🔍</div>
-      <h3>Faster Debugging</h3>
-      <p>Pattern-matching AI that surfaces root causes across your codebase, flags recurring issues, and suggests proven fixes before a human digs in.</p>
-      <div class="sol-metric">→ 40% reduction in debug time</div>
-    </div>
-    <div class="sol-card">
-      <div class="sol-icon">📄</div>
-      <h3>Auto Documentation</h3>
-      <p>From code comments to full API docs — generated continuously as your code evolves. Always current, always consistent, zero manual effort.</p>
-      <div class="sol-metric">→ 60% less documentation effort</div>
-    </div>
-  </div>
-</section>
-
-<!-- TIMELINE -->
-<section style="max-width:1100px;margin:0 auto;padding:80px 40px;">
-  <div class="section-tag reveal">The Playbook</div>
-  <h2 class="reveal">The 60-Day Framework</h2>
-  <p class="section-sub reveal">A structured execution plan — not a pilot that goes nowhere.</p>
-  <div class="timeline-wrap reveal">
-    <div class="timeline">
-      <div class="tl-step">
-        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
-        <div class="tl-days">Days 1–15</div>
-        <div class="tl-title">Identify Waste</div>
-        <div class="tl-desc">Engineering workflow audit. We map every repetitive task, quantify the time cost, and prioritize the highest-impact areas.</div>
-      </div>
-      <div class="tl-step">
-        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
-        <div class="tl-days">Days 16–40</div>
-        <div class="tl-title">Deploy GenAI Workflows</div>
-        <div class="tl-desc">Custom AI pipelines go live across testing, debugging, and documentation. Full integration with your existing stack.</div>
-      </div>
-      <div class="tl-step">
-        <div class="tl-dot"><div class="tl-dot-inner"></div></div>
-        <div class="tl-days">Days 41–60</div>
-        <div class="tl-title">Scale & Standardize</div>
-        <div class="tl-desc">We measure impact, train your team, and standardize workflows across the org. You own everything at the end.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CASE STUDIES -->
-<section style="max-width:1100px;margin:0 auto;padding:80px 40px;">
-  <div class="section-tag reveal">Results</div>
-  <h2 class="reveal">Real Numbers, Real Teams</h2>
-  <p class="section-sub reveal">Every engagement is measured from day one. Here's what clients have achieved.</p>
-  <div class="cases-grid reveal">
-    <div class="case-card">
-      <div class="case-metric">45%</div>
-      <div class="case-title">Faster Test Creation</div>
-      <div class="case-desc">SaaS startup, 12-person eng team. Reduced test authoring from 3.2h to 1.7h per dev per day within 45 days of deployment.</div>
-    </div>
-    <div class="case-card">
-      <div class="case-metric">40%</div>
-      <div class="case-title">Less Debugging Time</div>
-      <div class="case-desc">Fintech scale-up. AI pattern recognition cut recurring bug resolution time from 4.5h to 2.7h per incident on average.</div>
-    </div>
-    <div class="case-card">
-      <div class="case-metric">60%</div>
-      <div class="case-title">Documentation Effort Saved</div>
-      <div class="case-desc">Enterprise dev team. Auto-generated API docs eliminated 8h/week of manual documentation per engineer.</div>
-    </div>
-    <div class="case-card">
-      <div class="case-metric">2.4×</div>
-      <div class="case-title">Sprint Velocity Increase</div>
-      <div class="case-desc">Series A startup. Freed from repetitive work, engineering velocity more than doubled within the 60-day engagement.</div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section id="services" style="max-width:1100px;margin:0 auto;padding:80px 40px;">
-  <div class="section-tag reveal">What We Do</div>
-  <h2 class="reveal">Services</h2>
-  <p class="section-sub reveal">Every service is scoped to deliver measurable outcomes — not recommendations that sit in a deck.</p>
-  <div class="services-grid reveal">
-    <div class="srv-card">
-      <div class="srv-num">01</div>
-      <h3>GenAI Workflow Setup</h3>
-      <p>End-to-end design and deployment of AI pipelines tailored to your engineering stack and pain points.</p>
-    </div>
-    <div class="srv-card">
-      <div class="srv-num">02</div>
-      <h3>Engineering Productivity Audit</h3>
-      <p>A structured 2-week deep dive into where your team's time actually goes — with a quantified remediation plan.</p>
-    </div>
-    <div class="srv-card">
-      <div class="srv-num">03</div>
-      <h3>Custom AI Integration</h3>
-      <p>Connect GenAI tools to your CI/CD, issue tracker, and codebase without ripping out existing infrastructure.</p>
-    </div>
-    <div class="srv-card">
-      <div class="srv-num">04</div>
-      <h3>Team Enablement</h3>
-      <p>Hands-on training so your engineers own and extend the AI workflows after the engagement ends. No dependency on us.</p>
-    </div>
-  </div>
-</section>
-
-<!-- WHY CLIR -->
-<section style="max-width:1100px;margin:0 auto;padding:80px 40px;">
-  <div class="section-tag reveal">Why Us</div>
-  <h2 class="reveal">Practical. Measurable. Yours.</h2>
-  <p class="section-sub reveal">CLIR is not a research project. Every engagement is designed for engineers, by engineers.</p>
-  <div class="why-grid reveal">
-    <div class="why-card">
-      <div class="why-icon">🎯</div>
-      <div>
-        <h3>Outcomes, Not Outputs</h3>
-        <p>We define success metrics on day 1 and report against them weekly. If the numbers aren't moving, we adjust.</p>
-      </div>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">🔧</div>
-      <div>
-        <h3>Built for Engineering Teams</h3>
-        <p>No AI buzzwords. No theoretical frameworks. Just workflows that plug into how your team already works.</p>
-      </div>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">⚡</div>
-      <div>
-        <h3>Fast to Deploy</h3>
-        <p>Our playbook is battle-tested. First workflows go live within 2 weeks — not 6 months.</p>
-      </div>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">🔓</div>
-      <div>
-        <h3>You Own Everything</h3>
-        <p>All code, all pipelines, all documentation is transferred to you. Zero vendor lock-in by design.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- BIG CTA -->
-<div style="max-width:900px;margin:0 auto;padding:0 40px 80px;">
-  <div class="cta-card reveal">
-    <h2>Stop Doing Work<br>That Shouldn't Exist</h2>
-    <p>Join engineering teams that have reclaimed 50% of their sprint capacity. The 60-day transformation starts with a single conversation.</p>
-    <a href="#" class="btn-white" onclick="scrollTo_('#contact-form')">Start Your 60-Day Transformation →</a>
+<div id="problem" class="wrap">
+  <div class="slabel r">The problem</div>
+  <h2 class="r">Engineering teams are wasting<br>40–60% of their time</h2>
+  <p class="ssub r">Skilled engineers spend hours on tasks a well-configured AI pipeline could handle. That's capacity leaking silently, every sprint.</p>
+  <div class="pgrid4 r">
+    <div class="pcell"><div class="pnum">3.2h</div><div class="plbl">Spent writing repetitive test cases per engineer, per day</div></div>
+    <div class="pcell"><div class="pnum">47%</div><div class="plbl">Of debugging time spent on issues that recur each sprint</div></div>
+    <div class="pcell"><div class="pnum">8h/wk</div><div class="plbl">Lost per developer maintaining documentation</div></div>
+    <div class="pcell"><div class="pnum">$180K</div><div class="plbl">Annual cost per 5-person team from preventable repetition</div></div>
   </div>
 </div>
 
-<!-- CONTACT FORM -->
-<section id="contact-form" class="contact-section" style="max-width:800px;margin:0 auto;padding:80px 40px;">
-  <div class="section-tag reveal">Get Started</div>
-  <h2 class="reveal">Book a Free Strategy Call</h2>
-  <p class="section-sub reveal">Tell us about your team and we'll show you exactly where GenAI can save you the most time — in 30 minutes.</p>
-  <div class="form-card reveal">
-    <div class="form-grid" id="contactForm">
-      <div class="form-group">
-        <label>Your Name</label>
-        <input type="text" placeholder="Rahul Sharma" id="f-name" />
-      </div>
-      <div class="form-group">
-        <label>Work Email</label>
-        <input type="email" placeholder="rahul@company.com" id="f-email" />
-      </div>
-      <div class="form-group">
-        <label>Company</label>
-        <input type="text" placeholder="Acme Technologies" id="f-company" />
-      </div>
-      <div class="form-group">
-        <label>Team Size</label>
-        <select id="f-size">
-          <option>1–5 engineers</option>
-          <option>6–15 engineers</option>
-          <option>16–50 engineers</option>
-          <option>50+ engineers</option>
-        </select>
-      </div>
-      <div class="form-group form-full">
-        <label>What's your biggest repetitive bottleneck?</label>
-        <textarea placeholder="e.g. Our engineers spend half their time writing test cases and it's killing our velocity..." id="f-msg"></textarea>
-      </div>
-      <div class="form-full">
-        <button class="form-submit" onclick="submitForm()">Send Message — It's Free →</button>
-      </div>
+<hr class="divider">
+
+<div id="solution" class="wrap">
+  <div class="slabel r">The solution</div>
+  <h2 class="r">How CLIR fixes this</h2>
+  <p class="ssub r">Purpose-built GenAI workflows that integrate with your existing stack. No data science team required.</p>
+  <div class="sgrid">
+    <div class="scard r">
+      <div class="sicon"><svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h8M2 12h5"/><rect x="10" y="7" width="5" height="7" rx="1"/></svg></div>
+      <h3>AI-powered testing</h3>
+      <p>Auto-generate, categorize, and execute test cases — edge cases included. Engineers review results, not write boilerplate.</p>
+      <div class="sstat">→ 45% faster test creation</div>
     </div>
-    <p id="form-thanks" style="display:none;color:#22c55e;font-weight:500;font-size:15px;">✅ Message sent! We'll get back to you within 24 hours.</p>
+    <div class="scard r">
+      <div class="sicon"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg></div>
+      <h3>Faster debugging</h3>
+      <p>Pattern-matching AI that surfaces root causes, flags recurring issues, and suggests proven fixes before a human digs in.</p>
+      <div class="sstat">→ 40% reduction in debug time</div>
+    </div>
+    <div class="scard r">
+      <div class="sicon"><svg viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><path d="M5 6h6M5 9h4"/></svg></div>
+      <h3>Auto documentation</h3>
+      <p>From code comments to full API docs — generated continuously as your code evolves. Always current, zero manual effort.</p>
+      <div class="sstat">→ 60% less documentation effort</div>
+    </div>
   </div>
-</section>
+</div>
 
-</div><!-- end home page -->
+<hr class="divider">
 
-<!-- ═══════════════ CONTACT PAGE ═══════════════ -->
+<div class="wrap">
+  <div class="slabel r">The playbook</div>
+  <h2 class="r">60 days, structured</h2>
+  <p class="ssub r">A repeatable execution plan — not a pilot that goes nowhere.</p>
+  <div class="tgrid">
+    <div class="tcard r"><div class="tnum">01</div><div class="trange">Days 1–15</div><h3>Identify waste</h3><p>Engineering workflow audit. We map every repetitive task, quantify time cost, and prioritize highest-impact areas.</p></div>
+    <div class="tcard r"><div class="tnum">02</div><div class="trange">Days 16–40</div><h3>Deploy GenAI workflows</h3><p>Custom AI pipelines go live across testing, debugging, and documentation. Full integration with your existing stack.</p></div>
+    <div class="tcard r"><div class="tnum">03</div><div class="trange">Days 41–60</div><h3>Scale & standardize</h3><p>We measure impact, train your team, and standardize workflows. You own everything at the end.</p></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="wrap">
+  <div class="slabel r">Results</div>
+  <h2 class="r">Measured outcomes</h2>
+  <p class="ssub r">Every engagement tracked from day one.</p>
+  <div class="cgrid r">
+    <div class="ccell"><div class="cnum">45%</div><div class="ctitle">Faster test creation</div><div class="cdesc">SaaS startup, 12-person team. Authoring time cut from 3.2h to 1.7h per dev per day.</div></div>
+    <div class="ccell"><div class="cnum">40%</div><div class="ctitle">Less debug time</div><div class="cdesc">Fintech scale-up. Bug resolution cut from 4.5h to 2.7h per incident on average.</div></div>
+    <div class="ccell"><div class="cnum">60%</div><div class="ctitle">Documentation saved</div><div class="cdesc">Enterprise team. Auto-generated docs eliminated 8h/week of manual work per engineer.</div></div>
+    <div class="ccell"><div class="cnum">2.4×</div><div class="ctitle">Sprint velocity</div><div class="cdesc">Series A startup. Engineering velocity more than doubled within the 60-day engagement.</div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div id="services" class="wrap">
+  <div class="slabel r">Services</div>
+  <h2 class="r">What we do</h2>
+  <p class="ssub r">Every engagement scoped to deliver measurable outcomes — not slide decks.</p>
+  <div class="srvgrid">
+    <div class="srvcard r"><div class="srvn">01</div><h3>GenAI workflow setup</h3><p>End-to-end design and deployment of AI pipelines tailored to your engineering stack.</p></div>
+    <div class="srvcard r"><div class="srvn">02</div><h3>Productivity audit</h3><p>A structured 2-week deep dive into where your team's time goes — with a quantified remediation plan.</p></div>
+    <div class="srvcard r"><div class="srvn">03</div><h3>Custom AI integration</h3><p>Connect GenAI tools to your CI/CD, issue tracker, and codebase without ripping out infrastructure.</p></div>
+    <div class="srvcard r"><div class="srvn">04</div><h3>Team enablement</h3><p>Hands-on training so your engineers own and extend the AI workflows after the engagement ends.</p></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="wrap">
+  <div class="slabel r">Why CLIR</div>
+  <h2 class="r">Practical. Measurable. Yours.</h2>
+  <p class="ssub r">Not a research project. Built for engineers, by engineers.</p>
+  <div class="wgrid">
+    <div class="wcard r"><div class="wicon"><svg viewBox="0 0 14 14"><path d="M7 1l1.5 3.5L12 5.5l-2.5 2.5.5 3.5L7 10l-3 1.5.5-3.5L2 5.5l3.5-1z"/></svg></div><div><h3>Outcomes, not outputs</h3><p>Success metrics defined on day 1 and reported weekly. If numbers aren't moving, we adjust.</p></div></div>
+    <div class="wcard r"><div class="wicon"><svg viewBox="0 0 14 14"><rect x="1" y="3" width="12" height="8" rx="1.5"/><path d="M4 3V2M10 3V2"/></svg></div><div><h3>Built for engineering teams</h3><p>No buzzwords. No theoretical frameworks. Workflows that plug into how your team already works.</p></div></div>
+    <div class="wcard r"><div class="wicon"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 1.5"/></svg></div><div><h3>Fast to deploy</h3><p>Battle-tested playbook. First workflows go live within 2 weeks — not 6 months.</p></div></div>
+    <div class="wcard r"><div class="wicon"><svg viewBox="0 0 14 14"><path d="M5 7l2 2 4-4"/><rect x="1" y="1" width="12" height="12" rx="2"/></svg></div><div><h3>You own everything</h3><p>All code and pipelines transferred to you at the end. Zero vendor lock-in by design.</p></div></div>
+  </div>
+</div>
+
+<div style="max-width:1080px;margin:0 auto">
+  <div class="ctablock r">
+    <h2>Stop doing work<br>that shouldn't exist</h2>
+    <p>The 60-day transformation starts with a single conversation.</p>
+    <a href="#" class="btn-white" onclick="go('#cform')">Start your 60-day transformation</a>
+  </div>
+</div>
+
+<div id="cform" class="wrap-sm">
+  <div class="slabel r">Get started</div>
+  <h2 class="r">Book a free strategy call</h2>
+  <p class="ssub r">Tell us about your team. We'll show you exactly where GenAI saves the most time — in 30 minutes.</p>
+  <div class="fwrap r">
+    <div class="frow" id="theForm">
+      <div class="fg"><label>Name</label><input type="text" placeholder="Rahul Sharma" id="fn"/></div>
+      <div class="fg"><label>Work email</label><input type="email" placeholder="rahul@company.com" id="fe"/></div>
+      <div class="fg"><label>Company</label><input type="text" placeholder="Acme Technologies"/></div>
+      <div class="fg"><label>Team size</label><select><option>1–5 engineers</option><option>6–15 engineers</option><option>16–50 engineers</option><option>50+ engineers</option></select></div>
+      <div class="fg ffull"><label>Biggest repetitive bottleneck</label><textarea placeholder="e.g. Our engineers spend half their time writing test cases..."></textarea></div>
+      <div class="ffull"><button class="fsub" onclick="submitForm()">Send message →</button></div>
+    </div>
+    <p id="formok" style="display:none;font-size:15px;color:#16a34a;font-weight:500">✓ Sent. We'll follow up within 24 hours.</p>
+  </div>
+</div>
+
+</div><!-- /home -->
+
+<!-- CONTACT -->
 <div id="page-contact" class="page">
-  <section class="policy-section" style="max-width:800px;margin:0 auto;">
-    <div class="hero-badge" style="margin-top:20px;">📬 Get In Touch</div>
-    <h1>Contact Us</h1>
-    <p class="policy-date">We typically respond within 24 business hours.</p>
-
-    <h2>Direct Contact</h2>
-    <p><strong>Email:</strong> <a href="mailto:hello@clir.co.in" style="color:var(--accent);">hello@clir.co.in</a></p>
-    <p><strong>Website:</strong> clir.co.in</p>
-    <p><strong>LinkedIn:</strong> <a href="#" style="color:var(--accent);">linkedin.com/company/clir</a></p>
-
-    <h2>Business Details</h2>
-    <p><strong>Business Name:</strong> CLIR</p>
-    <p><strong>Domain:</strong> clir.co.in</p>
-    <p><strong>Nature of Business:</strong> GenAI Consulting Services</p>
-
-    <h2>Send Us a Message</h2>
-    <div class="form-card">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" placeholder="Your name" />
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" placeholder="your@email.com" />
-        </div>
-        <div class="form-group form-full">
-          <label>Message</label>
-          <textarea placeholder="How can we help?"></textarea>
-        </div>
-        <div class="form-full">
-          <button class="form-submit">Send Message →</button>
-        </div>
+  <div class="pwrap">
+    <h1>Contact</h1>
+    <p class="pdate">We respond within 24 business hours.</p>
+    <h2>Direct contact</h2>
+    <p><strong>Email:</strong> <a href="mailto:hello@clir.co.in">hello@clir.co.in</a></p>
+    <p><strong>LinkedIn:</strong> <a href="#">linkedin.com/company/clir</a></p>
+    <h2>Business details</h2>
+    <p><strong>Business name:</strong> CLIR &nbsp;·&nbsp; <strong>Website:</strong> clir.co.in &nbsp;·&nbsp; <strong>Nature:</strong> GenAI Consulting Services</p>
+    <h2>Send a message</h2>
+    <div class="fwrap" style="padding:32px">
+      <div class="frow">
+        <div class="fg"><label>Name</label><input type="text" placeholder="Your name"/></div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="your@email.com"/></div>
+        <div class="fg ffull"><label>Message</label><textarea placeholder="How can we help?"></textarea></div>
+        <div class="ffull"><button class="fsub">Send message →</button></div>
       </div>
     </div>
-  </section>
+  </div>
 </div>
 
-<!-- ═══════════════ PRIVACY POLICY ═══════════════ -->
+<!-- PRIVACY -->
 <div id="page-privacy" class="page">
-  <div class="policy-section" style="max-width:780px;margin:0 auto;">
-    <h1>Privacy Policy</h1>
-    <p class="policy-date">Last updated: May 2025</p>
-
-    <p>CLIR ("we", "us", or "our") operates clir.co.in. This policy explains how we collect, use, and protect your personal information.</p>
-
-    <h2>1. Information We Collect</h2>
-    <ul>
-      <li><strong>Contact form submissions:</strong> name, email, company name, and message</li>
-      <li><strong>Usage data:</strong> pages visited, time on site, browser type (via analytics)</li>
-      <li><strong>Payment data:</strong> processed by Razorpay — we do not store card details</li>
-    </ul>
-
-    <h2>2. How We Use Your Information</h2>
-    <ul>
-      <li>To respond to your enquiries and schedule strategy calls</li>
-      <li>To deliver purchased services</li>
-      <li>To send service-related communications (no marketing without consent)</li>
-      <li>To improve our website performance</li>
-    </ul>
-
-    <h2>3. Data Sharing</h2>
-    <p>We do not sell your personal data. We may share data with:</p>
-    <ul>
-      <li>Razorpay (payment processing) — governed by their privacy policy</li>
-      <li>Google Analytics (anonymised usage data)</li>
-      <li>Email service providers for transactional emails</li>
-    </ul>
-
-    <h2>4. Data Retention</h2>
-    <p>We retain contact form data for up to 24 months for service continuity. You may request deletion at any time.</p>
-
-    <h2>5. Your Rights</h2>
-    <p>You have the right to access, correct, or delete your personal data. Email us at <a href="mailto:hello@clir.co.in" style="color:var(--accent);">hello@clir.co.in</a>.</p>
-
-    <h2>6. Cookies</h2>
-    <p>We use minimal cookies for analytics. No tracking cookies are used for advertising.</p>
-
-    <h2>7. Security</h2>
-    <p>This site is served over HTTPS. Contact form data is transmitted securely. We do not store payment information.</p>
-
-    <h2>8. Contact</h2>
-    <p>For privacy-related queries: <a href="mailto:hello@clir.co.in" style="color:var(--accent);">hello@clir.co.in</a></p>
+  <div class="pwrap">
+    <h1>Privacy Policy</h1><p class="pdate">Last updated: May 2025</p>
+    <p>CLIR operates clir.co.in. This policy explains how we collect, use, and protect your personal information.</p>
+    <h2>Information we collect</h2>
+    <ul><li>Contact form submissions: name, email, company, message</li><li>Anonymised usage analytics</li><li>Payment data processed by Razorpay — we do not store card details</li></ul>
+    <h2>How we use it</h2>
+    <ul><li>To respond to enquiries and schedule calls</li><li>To deliver purchased services</li><li>To send service-related communications</li></ul>
+    <h2>Data sharing</h2>
+    <p>We do not sell your data. We share only with Razorpay (payments) and Google Analytics (anonymised usage).</p>
+    <h2>Your rights</h2>
+    <p>You may access, correct, or delete your data at any time. Email <a href="mailto:hello@clir.co.in">hello@clir.co.in</a>.</p>
+    <h2>Security</h2>
+    <p>The site is served over HTTPS. We do not store payment card information.</p>
   </div>
 </div>
 
-<!-- ═══════════════ REFUND POLICY ═══════════════ -->
+<!-- REFUND -->
 <div id="page-refund" class="page">
-  <div class="policy-section" style="max-width:780px;margin:0 auto;">
-    <h1>Refund Policy</h1>
-    <p class="policy-date">Last updated: May 2025</p>
-
-    <p>This Refund Policy applies to all services purchased through clir.co.in.</p>
-
-    <h2>1. Consulting & Strategy Services</h2>
-    <p>If you are dissatisfied with a strategy session, please contact us within <strong>48 hours</strong> of the session. We will offer a free follow-up session or a full refund at our discretion.</p>
-
-    <h2>2. 60-Day Engagement Programs</h2>
-    <ul>
-      <li><strong>Within 7 days of payment:</strong> Full refund if no work has commenced</li>
-      <li><strong>After kick-off but before Day 15:</strong> 50% refund</li>
-      <li><strong>After Day 15:</strong> No refund, as significant resources have been deployed</li>
-    </ul>
-
-    <h2>3. Digital Products (Playbooks, Templates)</h2>
-    <p>Digital downloads are non-refundable once accessed. If you believe the product is defective or misrepresented, contact us within 7 days for a resolution.</p>
-
-    <h2>4. How to Request a Refund</h2>
-    <p>Email <a href="mailto:hello@clir.co.in" style="color:var(--accent);">hello@clir.co.in</a> with your order details and reason for refund. We process eligible refunds within 5–7 business days to your original payment method via Razorpay.</p>
-
-    <h2>5. Disputes</h2>
-    <p>In case of a payment dispute, please contact us before initiating a chargeback. We are committed to fair resolution.</p>
+  <div class="pwrap">
+    <h1>Refund Policy</h1><p class="pdate">Last updated: May 2025</p>
+    <p>Applies to all services purchased through clir.co.in.</p>
+    <h2>Strategy sessions</h2>
+    <p>Contact us within 48 hours of the session. We will offer a free follow-up or full refund at our discretion.</p>
+    <h2>60-day engagement programs</h2>
+    <ul><li><strong>Within 7 days of payment, pre-kickoff:</strong> Full refund</li><li><strong>After kickoff, before Day 15:</strong> 50% refund</li><li><strong>After Day 15:</strong> No refund</li></ul>
+    <h2>Digital products</h2>
+    <p>Non-refundable once accessed. Contact us within 7 days for defective or misrepresented products.</p>
+    <h2>How to request</h2>
+    <p>Email <a href="mailto:hello@clir.co.in">hello@clir.co.in</a> with your order details. Eligible refunds processed within 5–7 business days.</p>
   </div>
 </div>
 
-<!-- ═══════════════ RETURN POLICY ═══════════════ -->
+<!-- RETURN -->
 <div id="page-return" class="page">
-  <div class="policy-section" style="max-width:780px;margin:0 auto;">
-    <h1>Return Policy</h1>
-    <p class="policy-date">Last updated: May 2025</p>
-
-    <p>CLIR provides digital consulting services and digital products. As such, physical returns are not applicable. Please refer to our <a href="#" onclick="showPage('refund')" style="color:var(--accent);">Refund Policy</a> for service cancellations and refunds.</p>
-
-    <h2>Digital Products</h2>
-    <p>All sales of digital products (playbooks, frameworks, templates) are final upon download or access. If you experience a technical issue accessing your purchase, contact us immediately at <a href="mailto:hello@clir.co.in" style="color:var(--accent);">hello@clir.co.in</a> and we will resolve it within 24 hours.</p>
-
-    <h2>Service Engagements</h2>
-    <p>For consulting service cancellations, please refer to the Refund Policy section above. Unused service credits do not carry over beyond the agreed engagement period unless explicitly agreed in writing.</p>
+  <div class="pwrap">
+    <h1>Return Policy</h1><p class="pdate">Last updated: May 2025</p>
+    <p>CLIR provides digital consulting services and products. Physical returns are not applicable. See our <a href="#" onclick="showPage('refund')">Refund Policy</a> for service cancellations.</p>
+    <h2>Digital products</h2>
+    <p>All sales are final upon download or access. Contact us immediately for technical access issues.</p>
+    <h2>Service engagements</h2>
+    <p>Unused service credits do not carry over beyond the agreed engagement period unless agreed in writing.</p>
   </div>
 </div>
 
-<!-- ═══════════════ DISCLAIMER ═══════════════ -->
+<!-- DISCLAIMER -->
 <div id="page-disclaimer" class="page">
-  <div class="policy-section" style="max-width:780px;margin:0 auto;">
-    <h1>Disclaimer</h1>
-    <p class="policy-date">Last updated: May 2025</p>
-
-    <h2>General</h2>
-    <p>The information on clir.co.in is for general informational purposes. While we make every effort to keep information accurate and current, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, or suitability of the information.</p>
-
-    <h2>Results Disclaimer</h2>
-    <p>The case study metrics and outcome percentages referenced on this website (e.g., "45% faster test creation") represent results achieved by specific clients under specific conditions. <strong>Individual results will vary</strong> based on team size, existing workflows, technology stack, and level of engagement. CLIR does not guarantee identical outcomes for all clients.</p>
-
-    <h2>No Professional Advice</h2>
-    <p>Content on this site does not constitute legal, financial, or professional advice. For advice specific to your situation, consult a qualified professional.</p>
-
-    <h2>External Links</h2>
-    <p>This website may contain links to third-party websites. CLIR has no control over the content or practices of those sites and accepts no responsibility for them.</p>
-
-    <h2>Limitation of Liability</h2>
-    <p>To the fullest extent permitted by law, CLIR shall not be liable for any indirect, incidental, or consequential damages arising from your use of this website or our services beyond the fees paid for those services.</p>
-
-    <h2>Governing Law</h2>
-    <p>These terms are governed by the laws of India. Disputes shall be subject to the exclusive jurisdiction of courts in India.</p>
+  <div class="pwrap">
+    <h1>Disclaimer</h1><p class="pdate">Last updated: May 2025</p>
+    <h2>Results disclaimer</h2>
+    <p>Case study metrics represent results from specific clients under specific conditions. <strong>Individual results will vary.</strong> CLIR does not guarantee identical outcomes.</p>
+    <h2>No professional advice</h2>
+    <p>Content on this site does not constitute legal, financial, or professional advice.</p>
+    <h2>Limitation of liability</h2>
+    <p>To the fullest extent permitted by law, CLIR shall not be liable for indirect or consequential damages beyond fees paid for the relevant services.</p>
+    <h2>Governing law</h2>
+    <p>Governed by the laws of India. Disputes subject to the exclusive jurisdiction of courts in India.</p>
   </div>
 </div>
 
-<!-- ═══════════════ FOOTER ═══════════════ -->
+<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <h3>🔍 CLIR</h3>
-      <p>Eliminating repetitive engineering work with practical GenAI deployments. Results in 60 days.</p>
-      <p style="margin-top:12px;">📧 <a href="mailto:hello@clir.co.in" style="color:rgba(255,255,255,0.6);text-decoration:none;">hello@clir.co.in</a></p>
+  <div class="fi">
+    <div class="fbrand">
+      <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600">
+        <div class="logo-mark"><svg viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><line x1="9.5" y1="9.5" x2="13" y2="13"/></svg></div>
+        CLIR
+      </div>
+      <p>Eliminating repetitive engineering work with practical GenAI. Results in 60 days.</p>
+      <p style="margin-top:8px"><a href="mailto:hello@clir.co.in" style="color:var(--text-3);text-decoration:none">hello@clir.co.in</a></p>
     </div>
-    <div class="footer-col">
+    <div class="fcol">
       <h4>Services</h4>
-      <a href="#" onclick="scrollTo_('#services')">GenAI Workflow Setup</a>
-      <a href="#" onclick="scrollTo_('#services')">Productivity Audit</a>
-      <a href="#" onclick="scrollTo_('#services')">Custom AI Integration</a>
-      <a href="#" onclick="scrollTo_('#services')">Team Enablement</a>
+      <a href="#" onclick="go('#services')">GenAI workflow setup</a>
+      <a href="#" onclick="go('#services')">Productivity audit</a>
+      <a href="#" onclick="go('#services')">Custom AI integration</a>
+      <a href="#" onclick="go('#services')">Team enablement</a>
     </div>
-    <div class="footer-col">
+    <div class="fcol">
       <h4>Company</h4>
-      <a href="#" onclick="scrollTo_('#problem')">About</a>
       <a href="#" onclick="showPage('contact')">Contact</a>
       <a href="#">LinkedIn</a>
     </div>
-    <div class="footer-col">
+    <div class="fcol">
       <h4>Legal</h4>
-      <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
-      <a href="#" onclick="showPage('refund')">Refund Policy</a>
-      <a href="#" onclick="showPage('return')">Return Policy</a>
+      <a href="#" onclick="showPage('privacy')">Privacy policy</a>
+      <a href="#" onclick="showPage('refund')">Refund policy</a>
+      <a href="#" onclick="showPage('return')">Return policy</a>
       <a href="#" onclick="showPage('disclaimer')">Disclaimer</a>
     </div>
   </div>
-  <div class="footer-bottom">
+  <div class="fbot">
     <span>© 2025 CLIR. All rights reserved.</span>
-    <span>clir.co.in · Made in India 🇮🇳</span>
+    <span>clir.co.in · India 🇮🇳</span>
   </div>
 </footer>
 
 <script>
-  // PAGE ROUTING
-  function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function scrollTo_(id) {
-    showPage('home');
-    setTimeout(() => {
-      const el = document.querySelector(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-  }
-
-  function toggleMobile() {
-    const links = document.querySelector('.nav-links');
-    links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-    if (links.style.display === 'flex') {
-      links.style.flexDirection = 'column';
-      links.style.position = 'absolute';
-      links.style.top = '70px';
-      links.style.right = '20px';
-      links.style.background = 'var(--bg)';
-      links.style.boxShadow = 'var(--shadow-md)';
-      links.style.borderRadius = '16px';
-      links.style.padding = '16px 20px';
-    }
-  }
-
-  // FORM SUBMIT
-  function submitForm() {
-    const name = document.getElementById('f-name').value;
-    const email = document.getElementById('f-email').value;
-    if (!name || !email) { alert('Please fill in your name and email.'); return; }
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('form-thanks').style.display = 'block';
-  }
-
-  // SCROLL REVEAL
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // STICKY NAV SHADOW
-  window.addEventListener('scroll', () => {
-    const nav = document.getElementById('mainNav');
-    nav.style.boxShadow = window.scrollY > 20 ? '0 4px 20px rgba(0,0,0,0.08)' : 'none';
-  });
+function showPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function go(id){
+  showPage('home');
+  setTimeout(()=>{const el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},120);
+}
+function toggleNav(){
+  const ul=document.querySelector('.nav-links');
+  const open=ul.style.display==='flex';
+  ul.style.cssText=open?'':'display:flex;flex-direction:column;position:absolute;top:60px;right:20px;background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:12px 16px;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,.08);z-index:200';
+}
+function submitForm(){
+  const n=document.getElementById('fn').value,e=document.getElementById('fe').value;
+  if(!n||!e){alert('Please fill in name and email.');return;}
+  document.getElementById('theForm').style.display='none';
+  document.getElementById('formok').style.display='block';
+}
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').style.borderBottomColor=window.scrollY>10?'#e5e5e5':'transparent';
+});
 </script>
 </body>
 </html>
