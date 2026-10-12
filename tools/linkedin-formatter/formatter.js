@@ -1,5 +1,11 @@
 (() => {
   "use strict";
+  window.__fmtOk = true;
+  try { /* scroll reveal runs first so a later error can never leave the page hidden */
+    const els = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window) { const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: .05 }); els.forEach(el => io.observe(el)); }
+    else els.forEach(el => el.classList.add("in"));
+  } catch { document.documentElement.classList.add("show-all"); }
   const $ = id => document.getElementById(id);
   const KEY = "clir.linkedinFormatter.draft.v2", MAX = 3000;
   const input = $("postInput"), preview = $("previewContent"), seeMore = $("seeMore"), card = $("previewCard");
@@ -135,8 +141,8 @@
   /* ---------- State ---------- */
   function msg(text, err) { fb.textContent = text; fb.style.color = err ? "#e5484d" : ""; clearTimeout(fbT); fbT = setTimeout(() => { fb.textContent = FEEDBACK; fb.style.color = ""; }, 4200); }
   function setSave(text, saving) { saveState.classList.toggle("saving", !!saving); saveState.innerHTML = `<span class="save-dot"></span> ${text}`; }
-  function persist() { try { localStorage.setItem(KEY, JSON.stringify({ text: input.value, badge: $("badgeOpt").checked })); setSave("Saved locally"); } catch { setSave("Local save unavailable"); } }
-  function refresh() { renderStats(); renderPreview(); setSave("Saving…", true); clearTimeout(saveT); saveT = setTimeout(persist, 250); }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify({ text: input.value, badge: $("badgeOpt").checked, name: $("pvName").value, head: $("pvHead").value })); setSave("Saved locally"); } catch { setSave("Local save unavailable"); } }
+  function refresh() { renderStats(); try { renderExtra(); } catch {} renderPreview(); setSave("Saving…", true); clearTimeout(saveT); saveT = setTimeout(persist, 250); }
   function record() { const v = input.value; if (v === last) return; hist = hist.slice(0, hi + 1); hist.push(v); if (hist.length > 100) hist.shift(); hi = hist.length - 1; last = v; histBtns(); }
   function histBtns() { undoBtn.disabled = hi <= 0; redoBtn.disabled = hi >= hist.length - 1; }
   function commit() { record(); expanded = false; refresh(); }
@@ -214,10 +220,6 @@
     document.querySelector('meta[name="theme-color"]').content = n === "dark" ? "#0f1117" : "#f0f2f5";
   };
 
-  /* scroll reveal */
-  const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .08 }) : null;
-  document.querySelectorAll(".reveal").forEach(el => io ? io.observe(el) : el.classList.add("in"));
-
   /* ads: only run with a real AdSense ID; hide slots on missing ID, blocked script (ad blocker) or no fill */
   (function initAds() {
     const slots = [...document.querySelectorAll(".ad-slot")];
@@ -239,7 +241,71 @@
     window.addEventListener("load", () => document.head.appendChild(sc));
   })();
 
+  /* ---------- Extra features ---------- */
+  const syl = w => { w = w.toLowerCase().replace(/[^a-z]/g, ""); if (!w) return 0; if (w.length <= 3) return 1; w = w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, "").replace(/^y/, ""); const m = w.match(/[aeiouy]{1,2}/g); return Math.max(1, m ? m.length : 1); };
+  function renderExtra() {
+    const t = plain(input.value), words = t.match(/[\p{L}\p{N}']+/gu) || [], sents = t.split(/[.!?\n]+/).filter(x => x.trim()).length || 1, n = input.value.length;
+    if (words.length < 8) { $("gradeNum").textContent = "–"; $("avgSent").textContent = "–"; }
+    else { const sy = words.reduce((a, w) => a + syl(w), 0), avg = words.length / sents; $("gradeNum").textContent = Math.max(0, Math.min(100, Math.round(206.835 - 1.015 * avg - 84.6 * sy / words.length))); $("avgSent").textContent = Math.round(avg); }
+    $("lenFit").textContent = !n ? "–" : n < 600 ? "Short" : n <= 1500 ? "Sweet spot" : n <= 2200 ? "Long" : "Very long";
+  }
+  function applyProfile() { const nm = $("pvName").value.trim() || "Your name"; $("pvNameOut").textContent = nm; $("pvHeadOut").textContent = $("pvHead").value.trim() || "Headline or role goes here"; $("avatarOut").textContent = nm[0].toUpperCase(); }
+  ["pvName", "pvHead"].forEach(id => $(id).addEventListener("input", () => { applyProfile(); setSave("Saving…", true); clearTimeout(saveT); saveT = setTimeout(persist, 250); }));
+
+  document.querySelectorAll("[data-case]").forEach(b => b.onclick = () => {
+    let s = input.selectionStart, e = input.selectionEnd; if (s === e) { s = 0; e = input.value.length; } if (s === e) return msg("Write something first.", true);
+    const t = plain(input.value.slice(s, e)), k = b.dataset.case;
+    const out = k === "upper" ? t.toUpperCase() : k === "lower" ? t.toLowerCase() : k === "title" ? t.toLowerCase().replace(/\b\p{L}/gu, c => c.toUpperCase()) : t.toLowerCase().replace(/(^\s*|[.!?]\s+|\n\s*)(\p{L})/gu, (m, a, c) => a + c.toUpperCase());
+    input.setRangeText(out, s, e, "select"); input.focus(); commit();
+  });
+  $("autoBtn").onclick = () => {
+    if (!input.value.trim()) return msg("Write something first.", true);
+    input.value = input.value.split("\n").map(l => l.length > 140 ? l.replace(/([.!?])\s+(?=\S)/g, "$1\n\n") : l.replace(/[ \t]+$/, "")).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    commit(); msg("Long paragraphs split into short lines. Undo if you prefer the original.");
+  };
+  const setFocus = on => { document.body.classList.toggle("focus", on); $("focusBtn").classList.toggle("flash", on); };
+  $("focusBtn").onclick = () => setFocus(!document.body.classList.contains("focus"));
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && document.body.classList.contains("focus")) setFocus(false); });
+
+  /* drafts hub */
+  const DK = "clir.linkedinFormatter.drafts.v1";
+  const getD = () => { try { return JSON.parse(localStorage.getItem(DK) || "[]"); } catch { return []; } };
+  const putD = d => { try { localStorage.setItem(DK, JSON.stringify(d)); } catch { msg("This browser blocked saving drafts.", true); } };
+  const mk = (label, fn) => { const b = document.createElement("button"); b.type = "button"; b.className = "btn-secondary"; b.textContent = label; b.onclick = fn; return b; };
+  function renderDrafts() {
+    const l = $("draftList"); l.innerHTML = ""; const d = getD();
+    if (!d.length) { const p = document.createElement("p"); p.className = "empty-note"; p.textContent = "No saved drafts yet. Write a post and hit “Save current as draft”."; l.appendChild(p); return; }
+    d.forEach((x, i) => {
+      const r = document.createElement("div"); r.className = "draft-row"; r.style.animationDelay = i * 40 + "ms";
+      const m = document.createElement("div"); m.className = "draft-meta"; const st = document.createElement("strong"), sm = document.createElement("small");
+      st.textContent = x.title || "Untitled"; sm.textContent = new Date(x.ts).toLocaleString() + " · " + x.text.length + " chars"; m.append(st, sm);
+      r.append(m, mk("Load", () => { input.value = x.text; commit(); window.scrollTo({ top: 0, behavior: "smooth" }); msg("Draft loaded."); }),
+        mk("Delete", () => { putD(getD().filter(y => y.id !== x.id)); renderDrafts(); }));
+      l.appendChild(r);
+    });
+  }
+  $("saveDraftBtn").onclick = () => {
+    if (!input.value.trim()) return msg("Write something first.", true);
+    const d = getD(); d.unshift({ id: Date.now(), ts: Date.now(), text: input.value, title: plain(input.value.trim().split("\n")[0]).slice(0, 60) }); putD(d.slice(0, 30)); renderDrafts(); msg("Draft saved to your drafts hub.");
+  };
+
+  /* image card export (1080x1350 PNG, good for single-image posts) */
+  $("imgBtn").onclick = async () => {
+    const raw = plain(input.value).trim(); if (!raw) return msg("Write something first.", true);
+    try { await document.fonts?.ready; } catch {}
+    const W = 1080, H = 1350, P = 90, pal = { light: ["#ffffff", "#1a1d24", "#4a6cf7"], dark: ["#0f1117", "#eef0f5", "#7b93ff"], accent: ["#4a6cf7", "#ffffff", "#dfe6ff"] }[$("cardTheme").value];
+    const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d"), font = '"DM Sans",system-ui,sans-serif';
+    x.fillStyle = pal[0]; x.fillRect(0, 0, W, H);
+    let fs = 52, lines = [];
+    const layout = () => { x.font = `500 ${fs}px ${font}`; const out = []; raw.split("\n").forEach(p => { if (!p.trim()) { out.push(""); return; } let cur = ""; p.split(/\s+/).forEach(w => { const t = cur ? cur + " " + w : w; if (x.measureText(t).width > W - 2 * P && cur) { out.push(cur); cur = w; } else cur = t; }); out.push(cur); }); return out; };
+    for (; fs >= 20; fs -= 2) { lines = layout(); if (lines.length * fs * 1.45 <= H - 2 * P - 120) break; }
+    x.fillStyle = pal[2]; x.fillRect(P, 56, 90, 8); x.fillStyle = pal[1]; x.textBaseline = "top";
+    lines.forEach((l, i) => { x.font = `${i === 0 ? 700 : 500} ${fs}px ${font}`; x.fillText(l, P, P + 20 + i * fs * 1.45); });
+    x.font = `600 28px ${font}`; x.fillStyle = pal[2]; x.fillText(($("pvName").value.trim() || "Your name") + ($("pvHead").value.trim() ? "  ·  " + $("pvHead").value.trim() : ""), P, H - P - 10);
+    c.toBlob(b => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "linkedin-post-card.png"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 800); msg("Image card downloaded."); });
+  };
+
   /* init */
-  try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) { if (typeof s.text === "string") input.value = s.text; $("badgeOpt").checked = !!s.badge; } } catch {}
-  last = input.value; hist = [last]; hi = 0; renderLib(); renderStats(); renderPreview(); histBtns(); setSave("Saved locally");
+  try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) { if (typeof s.text === "string") input.value = s.text; $("badgeOpt").checked = !!s.badge; $("pvName").value = s.name || ""; $("pvHead").value = s.head || ""; } } catch {}
+  last = input.value; hist = [last]; hi = 0; renderLib(); renderStats(); try { renderExtra(); applyProfile(); renderDrafts(); } catch {} renderPreview(); histBtns(); setSave("Saved locally");
 })();

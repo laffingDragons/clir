@@ -13,8 +13,8 @@ html[data-theme="dark"]{--f-bg:#0f1117;--f-surface:#171a22;--f-soft:#1d212b;--f-
 @keyframes pop{0%{transform:scale(.92);opacity:0}100%{transform:none;opacity:1}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
 @keyframes shimmer{to{background-position:200% 0}}
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--f-ease),transform .7s var(--f-ease)}
-.reveal.in{opacity:1;transform:none}
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--f-ease),transform .7s var(--f-ease)}
+.js .reveal.in,.show-all .reveal{opacity:1;transform:none}
 
 .theme-toggle{width:36px;height:36px;border-radius:50%;border:1px solid var(--f-border);background:var(--f-surface);color:var(--f-text);position:relative;overflow:hidden;transition:transform .3s var(--f-ease)}
 .theme-toggle:hover{transform:rotate(18deg) scale(1.08)}
@@ -140,7 +140,28 @@ html[data-theme="dark"]{--f-bg:#0f1117;--f-surface:#171a22;--f-soft:#1d212b;--f-
 
 @media(max-width:960px){.formatter-workspace{grid-template-columns:minmax(0,1fr)}.preview-panel{position:static}.image-tools{grid-template-columns:1fr;gap:20px}}
 @media(max-width:768px){.formatter-page{width:min(100% - 28px,680px);padding-top:100px}.editor-panel,.preview-panel,.library,.image-tools{padding:17px;border-radius:16px}.post-input{min-height:260px}.format-btn{min-width:40px}.format-btn kbd{display:none}.format-btn{height:40px}.formatter-page .btn-primary{flex:1 1 100%}.text-action{margin-left:0}.help-grid{grid-template-columns:1fr;gap:17px}.emoji-grid{grid-template-columns:repeat(8,1fr)}.formatter-footer{flex-wrap:wrap}.preview-stage{padding:10px}}
-@media(prefers-reduced-motion:reduce){.formatter-page *,.reveal,.formatter-intro h1 em{animation:none!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.formatter-page *,.reveal,.formatter-intro h1 em{animation:none!important;transition-duration:.01ms!important}.js .reveal{opacity:1;transform:none}}
 @property --s{syntax:"<number>";inherits:false;initial-value:0}
 
 .ad-slot.is-live{display:block}
+
+.tools-row{margin-top:-2px}
+.mini-select{height:39px;padding:0 10px;border-radius:9px;border:1px solid var(--f-border);background:var(--f-surface);color:var(--f-text2);font-size:11px;font-weight:600}
+.pv-edit{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-bottom:12px}
+.pv-edit input{min-width:0;padding:9px 11px;border-radius:9px;border:1px solid var(--f-border);background:var(--f-surface);color:var(--f-text);font:12px var(--font-body,"DM Sans",sans-serif);outline:none;transition:border-color .2s,box-shadow .2s}
+.pv-edit input:focus{border-color:var(--f-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--f-accent) 14%,transparent)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat-row div{padding:10px;border-radius:12px;background:var(--f-soft);border:1px solid var(--f-border);text-align:center;transition:transform .2s var(--f-ease)}
+.stat-row div:hover{transform:translateY(-2px)}
+.stat-row b{display:block;font-size:16px;color:var(--f-text)}.stat-row span{font-size:9px;color:var(--f-muted)}
+.draft-list{display:grid;gap:8px}
+.draft-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--f-soft);border:1px solid var(--f-border);animation:rise .4s var(--f-ease) backwards;transition:border-color .2s,transform .2s var(--f-ease)}
+.draft-row:hover{border-color:var(--f-accent);transform:translateX(3px)}
+.draft-meta{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+.draft-meta strong{font-size:12px;color:var(--f-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.draft-meta small{font-size:10px;color:var(--f-muted)}
+.draft-row .btn-secondary{min-height:32px;padding:6px 10px}
+.empty-note{font-size:12px;color:var(--f-muted);padding:10px 2px}
+.focus .preview-panel,.focus .library,.focus .image-tools,.focus .formatter-help,.focus .formatter-intro{display:none}
+.focus .formatter-workspace{grid-template-columns:minmax(0,820px);justify-content:center}
+.focus .post-input{min-height:60vh;font-size:16px!important}
+@media(max-width:768px){.pv-edit{grid-template-columns:1fr}}

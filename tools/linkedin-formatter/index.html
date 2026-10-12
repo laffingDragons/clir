@@ -11,7 +11,7 @@
 <meta property="og:description" content="Format LinkedIn posts with bold, italic and script fonts. Preview the feed, score your hook, copy in one click.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://clir.co.in/tools/linkedin-formatter/">
-<script>try{var t=localStorage.getItem("clir.theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>document.documentElement.classList.add("js");setTimeout(function(){if(!window.__fmtOk)document.documentElement.classList.add("show-all")},2500);try{var t=localStorage.getItem("clir.theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -66,6 +66,15 @@
         <span class="toolbar-divider"></span>
         <button type="button" class="format-btn" id="emojiToggle" title="Emoji (Ctrl/Cmd+Shift+E)" aria-label="Emoji picker">😊<kbd>Emoji</kbd></button>
       </div>
+      <div class="format-toolbar tools-row" role="toolbar" aria-label="Text tools">
+        <button type="button" class="format-btn" data-case="upper" aria-label="UPPERCASE">AA<kbd>Upper</kbd></button>
+        <button type="button" class="format-btn" data-case="lower" aria-label="lowercase">aa<kbd>Lower</kbd></button>
+        <button type="button" class="format-btn" data-case="sentence" aria-label="Sentence case">Aa<kbd>Sentence</kbd></button>
+        <button type="button" class="format-btn" data-case="title" aria-label="Title Case">Tt<kbd>Title</kbd></button>
+        <span class="toolbar-divider"></span>
+        <button type="button" class="format-btn" id="autoBtn" title="Split long paragraphs into short, scannable lines" aria-label="Auto-format">⚡<kbd>Auto-space</kbd></button>
+        <button type="button" class="format-btn" id="focusBtn" title="Distraction-free writing (Esc to exit)" aria-label="Focus mode">◎<kbd>Focus</kbd></button>
+      </div>
       <div class="emoji-panel" id="emojiPanel" hidden>
         <div class="emoji-panel-heading"><span>Quick emojis</span><button type="button" id="closeEmoji" aria-label="Close emoji picker">×</button></div>
         <div class="emoji-grid" id="emojiGrid"></div>
@@ -93,6 +102,8 @@
         <button type="button" class="btn-secondary" id="undoBtn" disabled>↶ Undo</button>
         <button type="button" class="btn-secondary" id="redoBtn" disabled>↷ Redo</button>
         <button type="button" class="btn-secondary" id="txtBtn">Export .txt</button>
+        <button type="button" class="btn-secondary" id="imgBtn">Export image</button>
+        <select id="cardTheme" class="mini-select" aria-label="Image card style"><option value="light">Light card</option><option value="dark">Dark card</option><option value="accent">Accent card</option></select>
         <button type="button" class="text-action" id="clearBtn">Clear draft</button>
       </div>
       <label class="badge-opt"><input type="checkbox" id="badgeOpt"> Add a small “Formatted with LinkedIn Text Formatter” footer when copying</label>
@@ -107,10 +118,11 @@
           <button type="button" class="seg-btn" data-device="desktop">Desktop</button>
         </div>
       </div>
+      <div class="pv-edit"><input id="pvName" placeholder="Your name" maxlength="40" aria-label="Preview name"><input id="pvHead" placeholder="Your headline" maxlength="80" aria-label="Preview headline"></div>
       <div class="preview-stage"><div class="preview-card is-mobile" id="previewCard">
         <div class="preview-profile">
-          <div class="profile-avatar" aria-hidden="true">Y</div>
-          <div class="pp-meta"><strong>Your name</strong><span>Headline or role goes here</span><small>Just now · 🌐</small></div>
+          <div class="profile-avatar" id="avatarOut" aria-hidden="true">Y</div>
+          <div class="pp-meta"><strong id="pvNameOut">Your name</strong><span id="pvHeadOut">Headline or role goes here</span><small>Just now · 🌐</small></div>
           <span class="linkedin-mark" aria-hidden="true">in</span>
         </div>
         <div class="preview-content is-empty" id="previewContent">Your post will appear here as you write.</div>
@@ -122,9 +134,15 @@
         <div class="score-ring" id="scoreRing" style="--s:0"><b id="scoreNum">0</b></div>
         <div><p class="panel-kicker">HOOK STRENGTH</p><strong id="scoreLabel">Start writing</strong><p class="score-tip" id="scoreTip">Your first line decides who clicks “see more”.</p></div>
       </div>
+      <div class="stat-row"><div><b id="gradeNum">–</b><span>Reading ease</span></div><div><b id="avgSent">–</b><span>Words / sentence</span></div><div><b id="lenFit">–</b><span>Length</span></div></div>
       <div class="tag-box"><p class="panel-kicker">HASHTAG IDEAS</p><div class="tag-list" id="tagList"></div></div>
     </aside>
   </div>
+
+  <section class="library reveal" aria-labelledby="drafts-heading">
+    <div class="panel-heading"><div><p class="panel-kicker">DRAFTS HUB</p><h2 id="drafts-heading">Saved drafts</h2></div><button type="button" class="btn-secondary" id="saveDraftBtn">+ Save current as draft</button></div>
+    <div class="draft-list" id="draftList"></div>
+  </section>
 
   <section class="library reveal" aria-labelledby="lib-heading">
     <div class="panel-heading"><div><p class="panel-kicker">HOOK &amp; CTA LIBRARY</p><h2 id="lib-heading">Click any line to insert it</h2></div>
