@@ -494,6 +494,7 @@
 <script>
   // PAGE ROUTING
   function showPage(name) {
+    if (name === 'tools') window.location.replace('tools');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
