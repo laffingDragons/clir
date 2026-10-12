@@ -1,295 +1,227 @@
 (() => {
   "use strict";
+  const $ = id => document.getElementById(id);
+  const KEY = "clir.linkedinFormatter.draft.v2", MAX = 3000;
+  const input = $("postInput"), preview = $("previewContent"), seeMore = $("seeMore"), card = $("previewCard");
+  const fb = $("copyFeedback"), undoBtn = $("undoBtn"), redoBtn = $("redoBtn"), saveState = $("saveState");
+  const FEEDBACK = "Styles use Unicode characters, so they carry over when pasted into LinkedIn.";
+  let hist = [""], hi = 0, last = "", device = "mobile", expanded = false, saveT, fbT, tab = "hooks";
 
-  const STORAGE_KEY = "clir.linkedinFormatter.draft.v1";
-  const input = document.getElementById("postInput");
-  const preview = document.getElementById("previewContent");
-  const charCount = document.getElementById("charCount");
-  const wordCount = document.getElementById("wordCount");
-  const lineCount = document.getElementById("lineCount");
-  const saveState = document.getElementById("saveState");
-  const copyBtn = document.getElementById("copyBtn");
-  const copyFeedback = document.getElementById("copyFeedback");
-  const undoBtn = document.getElementById("undoBtn");
-  const redoBtn = document.getElementById("redoBtn");
-  const emojiPanel = document.getElementById("emojiPanel");
-  const emojiGrid = document.getElementById("emojiGrid");
-  let saveTimer = null;
-  let history = [""];
-  let historyIndex = 0;
-  let lastInputValue = "";
-  let currentFont = "inherit";
-  let lastSelection = { start: 0, end: 0 };
-  let feedbackTimer = null;
-
-  const emojiList = ["😀","😂","🥹","😍","🤔","🙌","👏","💪","🔥","✨","🚀","💡","🎯","📌","📈","💼","🧠","❤️","💚","🙏","✅","❌","➡️","👇","👀","🌱","⭐","💬","📝","🤝","🎉","☕","🌍","⚡","🛠️","💯","😊","😎","🫶","📣","🔑","🏆","💭","📚","🎁","🌟","🤩","🧩","🗣️","💻","🧑‍💻","📊","🧪","🧵","💸","🕒","🛑","🫡","🌈","🧘"];
-
-  const maps = {
-    bold: { upper: 0x1D400, lower: 0x1D41A, digits: 0x1D7CE },
-    italic: { upper: 0x1D434, lower: 0x1D44E },
-    script: { upper: 0x1D4D0, lower: 0x1D4EA },
-    mono: { upper: 0x1D670, lower: 0x1D68A, digits: 0x1D7F6 }
+  /* ---------- Unicode maps ---------- */
+  const M = {
+    bold: [0x1D400, 0x1D41A, 0x1D7CE], italic: [0x1D434, 0x1D44E], bolditalic: [0x1D468, 0x1D482],
+    sansbold: [0x1D5D4, 0x1D5EE, 0x1D7EC], sansitalic: [0x1D608, 0x1D622], script: [0x1D4D0, 0x1D4EA], mono: [0x1D670, 0x1D68A, 0x1D7F6]
   };
-  const exceptions = {
-    italic: { h: "ℎ" },
-    script: { B: "ℬ", E: "ℰ", F: "ℱ", H: "ℋ", I: "ℐ", L: "ℒ", M: "ℳ", R: "ℛ", e: "ℯ", g: "ℊ", o: "ℴ" }
-  };
-
+  const EX = { italic: { h: "ℎ" } };
+  // reverse lookup so styles can be cleared or swapped
+  const REV = new Map();
+  Object.entries(M).forEach(([, [u, l, d]]) => {
+    for (let i = 0; i < 26; i++) { REV.set(u + i, String.fromCharCode(65 + i)); REV.set(l + i, String.fromCharCode(97 + i)); }
+    if (d) for (let i = 0; i < 10; i++) REV.set(d + i, String(i));
+  });
+  REV.set(0x210E, "h");
+  const plain = t => Array.from(t).map(c => REV.get(c.codePointAt(0)) ?? c).filter(c => c !== "\u0332" && c !== "\u0336").join("");
   function stylize(text, style) {
-    const map = maps[style];
-    if (!map) return text;
-    return Array.from(text).map(ch => {
-      if (exceptions[style] && exceptions[style][ch]) return exceptions[style][ch];
-      const cp = ch.codePointAt(0);
-      if (ch >= "A" && ch <= "Z" && map.upper) return String.fromCodePoint(map.upper + cp - 65);
-      if (ch >= "a" && ch <= "z" && map.lower) return String.fromCodePoint(map.lower + cp - 97);
-      if (ch >= "0" && ch <= "9" && map.digits) return String.fromCodePoint(map.digits + cp - 48);
-      return ch;
+    const t = plain(text);
+    if (style === "plain") return t;
+    if (style === "underline") return Array.from(t).map(c => c.trim() ? c + "\u0332" : c).join("");
+    if (style === "strike") return Array.from(t).map(c => c.trim() ? c + "\u0336" : c).join("");
+    const m = M[style]; if (!m) return t;
+    return Array.from(t).map(c => {
+      if (EX[style]?.[c]) return EX[style][c];
+      const p = c.codePointAt(0);
+      if (c >= "A" && c <= "Z") return String.fromCodePoint(m[0] + p - 65);
+      if (c >= "a" && c <= "z") return String.fromCodePoint(m[1] + p - 97);
+      if (c >= "0" && c <= "9" && m[2]) return String.fromCodePoint(m[2] + p - 48);
+      return c;
     }).join("");
   }
 
-  function updateCounts() {
-    const text = input.value;
-    charCount.textContent = String(text.length);
-    const words = text.trim() ? text.trim().split(/\s+/u).length : 0;
-    wordCount.textContent = String(words);
-    const lines = text.length ? text.split("\n").length : 1;
-    lineCount.textContent = `${lines} ${lines === 1 ? "line" : "lines"}`;
+  /* ---------- Content library ---------- */
+  const LIB = {
+    hooks: [
+      ["Contrarian", "Unpopular opinion: [common advice] is quietly killing your career."],
+      ["Number", "I spent 3 years doing [X]. Here are 7 lessons I wish I knew on day 1:"],
+      ["Story", "Last year I got rejected 41 times. The 42nd 'no' changed everything."],
+      ["Mistake", "The biggest mistake I see [role] make? They [mistake]."],
+      ["Question", "What would you do if you could only ship one feature this month?"],
+      ["Result", "We grew [metric] by 212% in 90 days without paid ads. Here's the playbook:"],
+      ["Myth", "Stop saying you 'don't have time'. You have priorities."],
+      ["Curiosity", "Nobody talks about this part of building a startup."]
+    ],
+    templates: [
+      ["Listicle", "[Hook line]\n\n1️⃣ [Point one]\n2️⃣ [Point two]\n3️⃣ [Point three]\n\nWhich one hit home for you?"],
+      ["Story arc", "[Surprising result]\n\nHere's what happened:\n\n• The problem\n• What I tried\n• What worked\n\nThe lesson: [one line]"],
+      ["Framework", "My simple framework for [goal]:\n\n➤ Step 1: [x]\n➤ Step 2: [y]\n➤ Step 3: [z]\n\nSave this for later."],
+      ["Engineering", "Shipped [feature] this week.\n\nStack: [tools]\nBiggest win: [win]\nBiggest mistake: [mistake]\n\nWhat would you have done differently?"],
+      ["Founder update", "Month [N] building [product]:\n\n✅ [Win]\n✅ [Win]\n❌ [Miss]\n\nNext month: [goal]"],
+      ["Job search", "I'm open to [role] roles.\n\nWhat I bring:\n• [skill]\n• [skill]\n• [skill]\n\nIntros and referrals welcome 🙏"]
+    ],
+    ctas: [
+      ["Engage", "What's your take? Tell me in the comments 👇"],
+      ["Save", "♻️ Repost to help someone in your network.\n💾 Save this for later."],
+      ["Follow", "Follow me for more posts on [topic]."],
+      ["Lead", "Want the full checklist? Comment 'CHECKLIST' and I'll send it."],
+      ["Book", "Open to a quick chat? Send me a DM."],
+      ["Poll", "Agree or disagree? Vote with 👍 or 💬."]
+    ]
+  };
+  function renderLib() {
+    const g = $("libGrid"); g.innerHTML = "";
+    LIB[tab].forEach(([label, body], i) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "lib-item"; b.style.animationDelay = i * 45 + "ms";
+      b.innerHTML = `<small></small><span></span>`; b.firstChild.textContent = label; b.lastChild.textContent = body;
+      b.onclick = () => insertLib(body); g.appendChild(b);
+    });
+  }
+  function insertLib(body) {
+    if (tab === "hooks") input.value = body + (input.value ? "\n\n" + input.value : "");
+    else if (tab === "templates" && !input.value.trim()) input.value = body;
+    else input.value += (input.value && !input.value.endsWith("\n") ? "\n\n" : "") + body;
+    commit(); input.focus(); msg("Inserted. Replace the [brackets] with your details.");
   }
 
-  function updatePreview() {
-    const value = input.value;
-    preview.textContent = value || "Your formatted post will appear here as you write.";
-    preview.classList.toggle("is-empty", !value);
-    preview.classList.toggle("font-serif", currentFont === "serif");
-    preview.classList.toggle("font-mono", currentFont === "mono");
-    updateCounts();
+  /* ---------- Analytics ---------- */
+  const TAGS = [
+    ["#Leadership", "Huge", /lead|manage|team/i], ["#Marketing", "Huge", /market|brand|growth|seo/i], ["#CareerAdvice", "Huge", /career|job|hire|interview|resume/i],
+    ["#Entrepreneurship", "Huge", /founder|startup|business|build/i], ["#ArtificialIntelligence", "Huge", /\bai\b|genai|llm|gpt|claude/i], ["#WebDevelopment", "Popular", /react|next\.?js|frontend|web|code|developer/i],
+    ["#Productivity", "Popular", /productiv|habit|focus|time/i], ["#PersonalBranding", "Popular", /brand|linkedin|content|audience/i], ["#SaaS", "Popular", /saas|product|b2b/i],
+    ["#Startups", "Popular", /startup|founder|fund/i], ["#SoftwareEngineering", "Niche", /engineer|software|stack|dev/i], ["#BuildInPublic", "Niche", /shipped|building|launch|month/i]
+  ];
+  const wc = t => t.trim() ? t.trim().split(/\s+/u).length : 0;
+  function hookScore(text) {
+    const first = plain(text.trim().split("\n")[0] || ""); if (!first) return [0, "Start writing", "Your first line decides who clicks “see more”."];
+    let s = 30, tip = "";
+    const len = first.length;
+    if (len <= 60) s += 25; else if (len <= 110) s += 15; else tip = "Shorten line one to under ~110 characters.";
+    if (/\d/.test(first)) s += 12; else tip = tip || "Add a specific number.";
+    if (/\?$/.test(first)) s += 8;
+    if (/(mistake|never|stop|nobody|secret|truth|unpopular|lesson|why|how|without|failed|rejected)/i.test(first)) s += 15;
+    if (/^(i'?m (excited|thrilled|happy|proud)|hello|hi everyone|great|happy to)/i.test(first)) { s -= 20; tip = "Openers like “I'm excited” are scrolled past."; }
+    if (text.includes("\n\n") || text.split("\n").length > 3) s += 10;
+    s = Math.max(5, Math.min(100, s));
+    return [s, s >= 75 ? "Strong hook" : s >= 50 ? "Decent hook" : "Weak hook", tip || (s >= 75 ? "Nice. Make sure it fits above the fold." : "Try a number, a bold claim or a question.")];
   }
-
-  function updateHistoryButtons() {
-    undoBtn.disabled = historyIndex <= 0;
-    redoBtn.disabled = historyIndex >= history.length - 1;
-  }
-
-  function recordHistory(value) {
-    if (value === lastInputValue) return;
-    history = history.slice(0, historyIndex + 1);
-    history.push(value);
-    if (history.length > 100) history.shift();
-    historyIndex = history.length - 1;
-    lastInputValue = value;
-    updateHistoryButtons();
-  }
-
-  function setSaveMessage(message, state = "") {
-    saveState.classList.toggle("saving", state === "saving");
-    saveState.innerHTML = `<span class="save-dot"></span> ${message}`;
-  }
-
-  function persistDraft() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        text: input.value,
-        font: currentFont,
-        updatedAt: new Date().toISOString()
-      }));
-      setSaveMessage("Saved locally");
-    } catch (error) {
-      setSaveMessage("Local save unavailable");
-      copyFeedback.textContent = "Your browser prevented local saving. You can still copy your post before leaving this page.";
+  function renderStats() {
+    const t = input.value, n = t.length;
+    $("charCount").textContent = n; $("wordCount").textContent = wc(t);
+    const sec = Math.round(wc(t) / 238 * 60); $("readTime").textContent = sec < 60 ? sec + "s" : Math.ceil(sec / 60) + " min";
+    const lines = t ? t.split("\n").length : 1; $("lineCount").textContent = lines + (lines === 1 ? " line" : " lines");
+    const bar = $("limitBar"); bar.style.width = Math.min(100, n / MAX * 100) + "%"; bar.className = n >= MAX ? "max" : n > MAX * .9 ? "warn" : "";
+    const [s, label, tip] = hookScore(t), ring = $("scoreRing");
+    ring.style.setProperty("--s", s); ring.style.setProperty("--c", s >= 75 ? "#22a06b" : s >= 50 ? "#e0a12c" : "#e5484d");
+    $("scoreNum").textContent = s; $("scoreLabel").textContent = label; $("scoreTip").textContent = tip;
+    const found = TAGS.filter(x => x[2].test(plain(t))); const show = (found.length ? found : TAGS.filter(x => x[1] === "Huge")).slice(0, 6);
+    const list = $("tagList"); const sig = show.map(x => x[0]).join();
+    if (list.dataset.sig !== sig) {
+      list.dataset.sig = sig; list.innerHTML = "";
+      show.forEach((x, i) => { const b = document.createElement("button"); b.type = "button"; b.className = "tag"; b.style.animationDelay = i * 40 + "ms"; b.innerHTML = `${x[0]} <em>${x[1].toUpperCase()}</em>`;
+        b.onclick = () => { input.value += (/\s$|^$/.test(input.value) ? "" : " ") + x[0]; commit(); }; list.appendChild(b); });
     }
   }
 
-  function scheduleSave() {
-    setSaveMessage("Saving…", "saving");
-    window.clearTimeout(saveTimer);
-    saveTimer = window.setTimeout(persistDraft, 250);
+  /* ---------- Preview (see-more truncation: ~3 lines / 140 chars mobile, 210 desktop) ---------- */
+  function renderPreview() {
+    const t = input.value; preview.classList.toggle("is-empty", !t);
+    if (!t) { preview.textContent = "Your post will appear here as you write."; seeMore.hidden = true; return; }
+    const limit = device === "mobile" ? 140 : 210, maxLines = 3;
+    const lines = t.split("\n"); let cut = t, truncated = false;
+    if (lines.length > maxLines) { cut = lines.slice(0, maxLines).join("\n"); truncated = true; }
+    if (cut.length > limit) { cut = cut.slice(0, limit).replace(/\s+\S*$/, ""); truncated = true; }
+    preview.textContent = expanded || !truncated ? t : cut + "…";
+    seeMore.hidden = !truncated || expanded;
   }
 
-  function restoreDraft() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) return;
-      const parsed = JSON.parse(saved);
-      if (typeof parsed.text === "string") input.value = parsed.text;
-      if (["inherit", "serif", "mono"].includes(parsed.font)) currentFont = parsed.font;
-      document.querySelectorAll(".font-option").forEach(button => {
-        button.classList.toggle("active", button.dataset.font === currentFont);
-      });
-    } catch (error) {
-      // Ignore malformed or blocked saved data; the editor remains usable.
-    }
-  }
+  /* ---------- State ---------- */
+  function msg(text, err) { fb.textContent = text; fb.style.color = err ? "#e5484d" : ""; clearTimeout(fbT); fbT = setTimeout(() => { fb.textContent = FEEDBACK; fb.style.color = ""; }, 4200); }
+  function setSave(text, saving) { saveState.classList.toggle("saving", !!saving); saveState.innerHTML = `<span class="save-dot"></span> ${text}`; }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify({ text: input.value, badge: $("badgeOpt").checked })); setSave("Saved locally"); } catch { setSave("Local save unavailable"); } }
+  function refresh() { renderStats(); renderPreview(); setSave("Saving…", true); clearTimeout(saveT); saveT = setTimeout(persist, 250); }
+  function record() { const v = input.value; if (v === last) return; hist = hist.slice(0, hi + 1); hist.push(v); if (hist.length > 100) hist.shift(); hi = hist.length - 1; last = v; histBtns(); }
+  function histBtns() { undoBtn.disabled = hi <= 0; redoBtn.disabled = hi >= hist.length - 1; }
+  function commit() { record(); expanded = false; refresh(); }
+  function jump(d) { const n = hi + d; if (n < 0 || n >= hist.length) return; hi = n; input.value = hist[hi]; last = input.value; histBtns(); refresh(); }
 
-  function rememberSelection() {
-    lastSelection = { start: input.selectionStart, end: input.selectionEnd };
+  /* ---------- Actions ---------- */
+  function applyFormat(style, btn) {
+    const s = input.selectionStart, e = input.selectionEnd;
+    if (s === e) { msg("Select the text you want to style first.", true); input.focus(); return; }
+    input.setRangeText(stylize(input.value.slice(s, e), style), s, e, "select"); input.focus(); commit();
+    if (btn) { btn.classList.remove("flash"); void btn.offsetWidth; btn.classList.add("flash"); }
   }
-
-  function applyFormat(style) {
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    if (start === end) {
-      copyFeedback.textContent = "Select the text you want to style, then choose a formatting option.";
-      input.focus();
-      return;
-    }
-    const selected = input.value.slice(start, end);
-    const transformed = stylize(selected, style);
-    input.setRangeText(transformed, start, end, "select");
-    input.focus();
-    lastInputValue = history[historyIndex];
-    recordHistory(input.value);
-    updatePreview();
-    scheduleSave();
+  function applyList(kind) {
+    const v = input.value; let s = v.lastIndexOf("\n", input.selectionStart - 1) + 1, e = v.indexOf("\n", input.selectionEnd); if (e < 0) e = v.length;
+    const NUM = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]; let i = 0;
+    const out = v.slice(s, e).split("\n").map(l => {
+      const body = l.replace(/^\s*(?:[•➤✅]|\d+\.|(?:[1-9]️⃣|🔟))\s*/u, ""); if (!body.trim()) return l;
+      return (kind === "1" ? NUM[Math.min(i++, 9)] : kind) + " " + body;
+    }).join("\n");
+    input.setRangeText(out, s, s + (e - s), "select"); input.focus(); commit();
   }
-
-  function insertTextAtSelection(text) {
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    input.setRangeText(text, start, end, "end");
-    input.focus();
-    recordHistory(input.value);
-    updatePreview();
-    scheduleSave();
+  function output() {
+    let t = input.value;
+    if ($("badgeOpt").checked && t.trim()) t += "\n\n—\nFormatted with LinkedIn Text Formatter · clir.co.in/tools/linkedin-formatter";
+    return t;
   }
-
-  function showCopyFeedback(message, isError = false) {
-    copyFeedback.textContent = message;
-    copyFeedback.style.color = isError ? "#bd3c48" : "";
-    window.clearTimeout(feedbackTimer);
-    feedbackTimer = window.setTimeout(() => {
-      copyFeedback.textContent = "Formatting uses Unicode characters where possible, so styles can carry over when pasted into LinkedIn.";
-      copyFeedback.style.color = "";
-    }, 4500);
-  }
-
   async function copyPost() {
-    const text = input.value;
-    if (!text) {
-      showCopyFeedback("Write something first, then copy your post.", true);
-      input.focus();
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(text);
-      showCopyFeedback("Copied. Paste your post into LinkedIn when you're ready.");
-    } catch (error) {
-      input.focus();
-      input.select();
-      const success = document.execCommand("copy");
-      input.setSelectionRange(lastSelection.start, lastSelection.end);
-      showCopyFeedback(success ? "Copied. Paste your post into LinkedIn when you're ready." : "Copy was blocked by the browser. Select the text and copy it manually.", !success);
-    }
+    if (!input.value) { msg("Write something first, then copy your post.", true); input.focus(); return; }
+    let ok = true;
+    try { await navigator.clipboard.writeText(output()); } catch { const ta = document.createElement("textarea"); ta.value = output(); document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); ta.remove(); }
+    const b = $("copyBtn");
+    if (ok) { b.textContent = "Copied ✓"; b.classList.add("done"); setTimeout(() => { b.textContent = "Copy formatted post"; b.classList.remove("done"); }, 1800); msg("Copied. Paste it into LinkedIn."); }
+    else msg("Copy was blocked. Select the text and copy manually.", true);
+  }
+  function exportTxt() {
+    if (!input.value) return msg("Nothing to export yet.", true);
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([output()], { type: "text/plain" })); a.download = "linkedin-post.txt"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 500);
   }
 
-  function undo() {
-    if (historyIndex <= 0) return;
-    historyIndex -= 1;
-    input.value = history[historyIndex];
-    lastInputValue = input.value;
-    updatePreview();
-    updateHistoryButtons();
-    scheduleSave();
-  }
+  /* ---------- Wiring ---------- */
+  document.querySelectorAll("[data-format]").forEach(b => b.onclick = () => applyFormat(b.dataset.format, b));
+  document.querySelectorAll("[data-list]").forEach(b => b.onclick = () => applyList(b.dataset.list));
+  document.querySelectorAll("[data-device]").forEach(b => b.onclick = () => {
+    device = b.dataset.device; expanded = false;
+    document.querySelectorAll("[data-device]").forEach(x => x.classList.toggle("active", x === b));
+    card.className = "preview-card is-" + device; renderPreview();
+  });
+  document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { tab = b.dataset.tab; document.querySelectorAll("[data-tab]").forEach(x => x.classList.toggle("active", x === b)); renderLib(); });
+  seeMore.onclick = () => { expanded = true; renderPreview(); };
+  input.addEventListener("input", commit);
+  $("badgeOpt").onchange = persist;
+  $("copyBtn").onclick = copyPost; $("txtBtn").onclick = exportTxt; undoBtn.onclick = () => jump(-1); redoBtn.onclick = () => jump(1);
+  $("clearBtn").onclick = () => { if (input.value && confirm("Clear your current draft?")) { input.value = ""; commit(); input.focus(); } };
 
-  function redo() {
-    if (historyIndex >= history.length - 1) return;
-    historyIndex += 1;
-    input.value = history[historyIndex];
-    lastInputValue = input.value;
-    updatePreview();
-    updateHistoryButtons();
-    scheduleSave();
-  }
+  const emojis = "😀😂🥹😍🤔🙌👏💪🔥✨🚀💡🎯📌📈💼🧠❤️💚🙏✅❌➡️👇👀🌱⭐💬📝🤝🎉☕🌍⚡🛠️💯😎🫶📣🔑🏆💭📚🌟🧩💻📊🧪🧵💸🕒".match(/\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*/gu);
+  emojis.forEach(em => { const b = document.createElement("button"); b.type = "button"; b.textContent = em; b.setAttribute("aria-label", "Insert " + em);
+    b.onclick = () => { input.setRangeText(em, input.selectionStart, input.selectionEnd, "end"); $("emojiPanel").hidden = true; input.focus(); commit(); }; $("emojiGrid").appendChild(b); });
+  const togglePanel = () => { $("emojiPanel").hidden = !$("emojiPanel").hidden; };
+  $("emojiToggle").onclick = togglePanel; $("closeEmoji").onclick = () => { $("emojiPanel").hidden = true; $("emojiToggle").focus(); };
 
-  function clearDraft() {
-    if (!input.value) return;
-    const confirmed = window.confirm("Clear your current draft? This also updates the locally saved draft.");
-    if (!confirmed) return;
-    input.value = "";
-    recordHistory(input.value);
-    updatePreview();
-    scheduleSave();
-    input.focus();
-  }
-
-  function toggleEmojiPicker() {
-    emojiPanel.hidden = !emojiPanel.hidden;
-    if (!emojiPanel.hidden) {
-      const first = emojiGrid.querySelector("button");
-      if (first) first.focus();
-    }
-  }
-
-  document.querySelectorAll("[data-format]").forEach(button => {
-    button.addEventListener("click", () => applyFormat(button.dataset.format));
+  document.addEventListener("keydown", ev => {
+    if (ev.key === "Escape" && !$("emojiPanel").hidden) { $("emojiPanel").hidden = true; return; }
+    const mod = ev.metaKey || ev.ctrlKey; if (!mod) return; const k = ev.key.toLowerCase();
+    const map = { b: "bold", i: "italic", s: "script", m: "mono" };
+    if (ev.shiftKey && map[k]) { ev.preventDefault(); applyFormat(map[k]); }
+    else if (ev.shiftKey && k === "e") { ev.preventDefault(); togglePanel(); }
+    else if (document.activeElement === input && k === "z") { ev.preventDefault(); jump(ev.shiftKey ? 1 : -1); }
+    else if (document.activeElement === input && k === "y") { ev.preventDefault(); jump(1); }
   });
 
-  emojiList.forEach(emoji => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = emoji;
-    button.setAttribute("aria-label", `Insert ${emoji}`);
-    button.addEventListener("click", () => {
-      insertTextAtSelection(emoji);
-      emojiPanel.hidden = true;
-    });
-    emojiGrid.appendChild(button);
-  });
+  /* theme */
+  $("themeToggle").onclick = () => {
+    const d = document.documentElement, n = d.dataset.theme === "dark" ? "light" : "dark"; d.dataset.theme = n;
+    try { localStorage.setItem("clir.theme", n); } catch {}
+    document.querySelector('meta[name="theme-color"]').content = n === "dark" ? "#0f1117" : "#f0f2f5";
+  };
 
-  input.addEventListener("input", () => {
-    recordHistory(input.value);
-    updatePreview();
-    scheduleSave();
-  });
-  input.addEventListener("select", rememberSelection);
-  input.addEventListener("keyup", rememberSelection);
-  input.addEventListener("click", rememberSelection);
+  /* scroll reveal */
+  const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .08 }) : null;
+  document.querySelectorAll(".reveal").forEach(el => io ? io.observe(el) : el.classList.add("in"));
 
-  document.getElementById("emojiToggle").addEventListener("click", toggleEmojiPicker);
-  document.getElementById("closeEmoji").addEventListener("click", () => {
-    emojiPanel.hidden = true;
-    document.getElementById("emojiToggle").focus();
-  });
-  copyBtn.addEventListener("click", copyPost);
-  undoBtn.addEventListener("click", undo);
-  redoBtn.addEventListener("click", redo);
-  document.getElementById("clearBtn").addEventListener("click", clearDraft);
+  /* ads: init each slot once; fail silently so layout never breaks */
+  window.addEventListener("load", () => document.querySelectorAll("ins.adsbygoogle").forEach(() => { try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch {} }));
 
-  document.querySelectorAll(".font-option").forEach(button => {
-    button.addEventListener("click", () => {
-      currentFont = button.dataset.font;
-      document.querySelectorAll(".font-option").forEach(option => option.classList.toggle("active", option === button));
-      updatePreview();
-      scheduleSave();
-    });
-  });
-
-  document.addEventListener("keydown", event => {
-    const mod = event.metaKey || event.ctrlKey;
-    if (!mod) {
-      if (event.key === "Escape" && !emojiPanel.hidden) {
-        emojiPanel.hidden = true;
-        document.getElementById("emojiToggle").focus();
-      }
-      return;
-    }
-    const key = event.key.toLowerCase();
-    if (event.shiftKey && key === "b") { event.preventDefault(); applyFormat("bold"); }
-    else if (event.shiftKey && key === "i") { event.preventDefault(); applyFormat("italic"); }
-    else if (event.shiftKey && key === "s") { event.preventDefault(); applyFormat("script"); }
-    else if (event.shiftKey && key === "m") { event.preventDefault(); applyFormat("mono"); }
-    else if (event.shiftKey && key === "e") { event.preventDefault(); toggleEmojiPicker(); }
-    else if (key === "z" && event.shiftKey) { event.preventDefault(); redo(); }
-    else if (key === "z") { event.preventDefault(); undo(); }
-    else if (key === "y") { event.preventDefault(); redo(); }
-  });
-
-  restoreDraft();
-  lastInputValue = input.value;
-  history = [input.value];
-  historyIndex = 0;
-  updatePreview();
-  updateHistoryButtons();
-  setSaveMessage("Saved locally");
+  /* init */
+  try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) { if (typeof s.text === "string") input.value = s.text; $("badgeOpt").checked = !!s.badge; } } catch {}
+  last = input.value; hist = [last]; hi = 0; renderLib(); renderStats(); renderPreview(); histBtns(); setSave("Saved locally");
 })();

@@ -1,137 +1,169 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f0f2f5">
-  <meta name="description" content="Format LinkedIn posts with Unicode bold, italic, script and monospace styles. Preview, copy and save your draft locally for free.">
-  <link rel="canonical" href="https://clir.co.in/tools/linkedin-formatter/">
-  <title>Free LinkedIn Post Formatter — CLIR Tools</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../style.css">
-  <link rel="stylesheet" href="../tools.css">
-  <link rel="stylesheet" href="./formatter.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f0f2f5">
+<title>LinkedIn Text Formatter – Free Bold, Italic &amp; Post Preview Tool | CLIR</title>
+<meta name="description" content="Free LinkedIn text formatter: bold, italic, script and monospace Unicode fonts, live LinkedIn post preview (mobile + desktop), hook score, hashtags and templates. No signup.">
+<link rel="canonical" href="https://clir.co.in/tools/linkedin-formatter/">
+<meta property="og:title" content="LinkedIn Text Formatter – Free Post Formatter & Previewer">
+<meta property="og:description" content="Format LinkedIn posts with bold, italic and script fonts. Preview the feed, score your hook, copy in one click.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clir.co.in/tools/linkedin-formatter/">
+<script>try{var t=localStorage.getItem("clir.theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../tools.css">
+<link rel="stylesheet" href="./formatter.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"LinkedIn Text Formatter","url":"https://clir.co.in/tools/linkedin-formatter/","applicationCategory":"BusinessApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"CLIR","url":"https://clir.co.in"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does a LinkedIn text formatter work?","acceptedAnswer":{"@type":"Answer","text":"LinkedIn has no native bold or italic. A LinkedIn text formatter swaps normal letters for look-alike Unicode characters, so the styling survives copy and paste into LinkedIn."}},{"@type":"Question","name":"Is this LinkedIn text formatter free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is free, needs no signup and runs in your browser. Drafts are saved only on your device."}},{"@type":"Question","name":"Does Unicode bold hurt accessibility or search?","acceptedAnswer":{"@type":"Answer","text":"Screen readers can read styled characters poorly and LinkedIn search does not index them as normal words. Use styles for short hooks and headings, and keep keywords in plain text."}},{"@type":"Question","name":"Where does LinkedIn cut off a post?","acceptedAnswer":{"@type":"Answer","text":"The feed shows roughly the first 3 lines (about 140 characters on mobile, 210 on desktop) before the see more link, so the hook must land there."}}]}]}</script>
 </head>
-<body>
-  <nav class="clir-nav">
-    <a class="nav-logo" href="../../index.html" aria-label="CLIR home">
-          <div class="logo-icon"><img width="24px" src="../../assets/images/clir-logo.png" alt="" srcset=""></div>
-      <span>CLIR</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="../../index.html">Home</a></li>
-      <li><a href="../index.html">Tools</a></li>
-      <li><a href="../../index.html#contact">Contact</a></li>
-      <li><a class="tools-nav-cta" href="../index.html">← All tools</a></li>
-    </ul>
-  </nav>
+<body class="fmt-body">
+<nav class="clir-nav">
+  <a class="nav-logo" href="../../index.html" aria-label="CLIR home"><div class="logo-icon"><img width="24" src="../../assets/images/clir-logo.png" alt=""></div><span>CLIR</span></a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../index.html">Tools</a></li>
+    <li><a href="../../index.html#contact">Contact</a></li>
+    <li><button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><span class="tt-sun">☀</span><span class="tt-moon">☾</span></button></li>
+    <li><a class="tools-nav-cta" href="../index.html">← All tools</a></li>
+  </ul>
+</nav>
 
-  <main class="formatter-page">
-    <header class="formatter-intro">
-      <a class="back-link" href="../index.html">← CLIR Tools</a>
-      <p class="formatter-eyebrow"><span></span> FREE WRITING TOOL</p>
-      <h1>Make your post <em>stand out.</em></h1>
-      <p class="formatter-lede">Format your LinkedIn post, preview how it reads, then copy it over. Your draft stays in this browser.</p>
-    </header>
+<main class="formatter-page">
+  <header class="formatter-intro reveal">
+    <a class="back-link" href="../index.html">← CLIR Tools</a>
+    <p class="formatter-eyebrow"><span></span> FREE LINKEDIN TEXT FORMATTER</p>
+    <h1>LinkedIn Text Formatter <em>that makes posts stand out.</em></h1>
+    <p class="formatter-lede">Bold, italic, script and monospace fonts, a live LinkedIn feed preview, hook score and templates. Your draft never leaves this browser.</p>
+  </header>
 
-    <div class="formatter-workspace">
-      <section class="editor-panel" aria-labelledby="editor-heading">
-        <div class="panel-heading">
-          <div><p class="panel-kicker">YOUR WORKSPACE</p><h2 id="editor-heading">Post editor</h2></div>
-          <span class="save-state" id="saveState" aria-live="polite"><span class="save-dot"></span> Saved locally</span>
-        </div>
+  <div class="formatter-workspace">
+    <section class="editor-panel reveal" aria-labelledby="editor-heading">
+      <div class="panel-heading">
+        <div><p class="panel-kicker">YOUR WORKSPACE</p><h2 id="editor-heading">Post editor</h2></div>
+        <span class="save-state" id="saveState" aria-live="polite"><span class="save-dot"></span> Saved locally</span>
+      </div>
 
-        <div class="format-toolbar" role="toolbar" aria-label="Text formatting">
-          <button type="button" class="format-btn" data-format="bold" title="Unicode bold (Ctrl/Cmd+Shift+B)" aria-label="Apply Unicode bold"><strong>B</strong><kbd>⌘/Ctrl ⇧ B</kbd></button>
-          <button type="button" class="format-btn" data-format="italic" title="Unicode italic (Ctrl/Cmd+Shift+I)" aria-label="Apply Unicode italic"><em>I</em><kbd>⌘/Ctrl ⇧ I</kbd></button>
-          <button type="button" class="format-btn" data-format="script" title="Script style (Ctrl/Cmd+Shift+S)" aria-label="Apply script style">𝒮<kbd>⌘/Ctrl ⇧ S</kbd></button>
-          <button type="button" class="format-btn" data-format="mono" title="Monospace (Ctrl/Cmd+Shift+M)" aria-label="Apply monospace">𝙼<kbd>⌘/Ctrl ⇧ M</kbd></button>
-          <span class="toolbar-divider"></span>
-          <button type="button" class="format-btn emoji-trigger" id="emojiToggle" title="Insert emoji (Ctrl/Cmd+Shift+E)" aria-label="Open emoji picker">😊<kbd>⌘/Ctrl ⇧ E</kbd></button>
-        </div>
-        <div class="emoji-panel" id="emojiPanel" hidden aria-label="Emoji picker">
-          <div class="emoji-panel-heading"><span>Quick emojis</span><button type="button" id="closeEmoji" aria-label="Close emoji picker">×</button></div>
-          <div class="emoji-grid" id="emojiGrid"></div>
-        </div>
+      <div class="format-toolbar" role="toolbar" aria-label="Text formatting">
+        <button type="button" class="format-btn" data-format="bold" title="Bold serif (Ctrl/Cmd+Shift+B)" aria-label="Bold">𝐁<kbd>Bold</kbd></button>
+        <button type="button" class="format-btn" data-format="italic" title="Italic (Ctrl/Cmd+Shift+I)" aria-label="Italic">𝐼<kbd>Italic</kbd></button>
+        <button type="button" class="format-btn" data-format="bolditalic" aria-label="Bold italic">𝑩<kbd>B+I</kbd></button>
+        <button type="button" class="format-btn" data-format="sansbold" aria-label="Sans bold">𝗕<kbd>Sans</kbd></button>
+        <button type="button" class="format-btn" data-format="sansitalic" aria-label="Sans italic">𝘐<kbd>S-Ital</kbd></button>
+        <button type="button" class="format-btn" data-format="script" title="Script (Ctrl/Cmd+Shift+S)" aria-label="Script">𝒮<kbd>Script</kbd></button>
+        <button type="button" class="format-btn" data-format="mono" title="Typewriter (Ctrl/Cmd+Shift+M)" aria-label="Typewriter">𝙼<kbd>Mono</kbd></button>
+        <button type="button" class="format-btn" data-format="underline" aria-label="Underline"><u>U</u><kbd>Under</kbd></button>
+        <button type="button" class="format-btn" data-format="strike" aria-label="Strikethrough"><s>S</s><kbd>Strike</kbd></button>
+        <button type="button" class="format-btn" data-format="plain" aria-label="Clear formatting">Tx<kbd>Clear</kbd></button>
+        <span class="toolbar-divider"></span>
+        <button type="button" class="format-btn" data-list="•" aria-label="Bullet list">•<kbd>Bullets</kbd></button>
+        <button type="button" class="format-btn" data-list="➤" aria-label="Arrow list">➤<kbd>Arrows</kbd></button>
+        <button type="button" class="format-btn" data-list="✅" aria-label="Check list">✅<kbd>Checks</kbd></button>
+        <button type="button" class="format-btn" data-list="1" aria-label="Numbered list">1.<kbd>Numbers</kbd></button>
+        <span class="toolbar-divider"></span>
+        <button type="button" class="format-btn" id="emojiToggle" title="Emoji (Ctrl/Cmd+Shift+E)" aria-label="Emoji picker">😊<kbd>Emoji</kbd></button>
+      </div>
+      <div class="emoji-panel" id="emojiPanel" hidden>
+        <div class="emoji-panel-heading"><span>Quick emojis</span><button type="button" id="closeEmoji" aria-label="Close emoji picker">×</button></div>
+        <div class="emoji-grid" id="emojiGrid"></div>
+      </div>
 
-        <label class="sr-only" for="postInput">Write your LinkedIn post</label>
-        <textarea id="postInput" class="post-input" maxlength="30000" spellcheck="true" placeholder="Start with a strong opening line…&#10;&#10;Write your thoughts here. Select any text, then choose a style from the toolbar."></textarea>
-        <div class="editor-meta">
-          <span><strong id="charCount">0</strong> characters</span>
-          <span><strong id="wordCount">0</strong> words</span>
-          <span id="lineCount">1 line</span>
-        </div>
+      <!-- Ad slot 1: reserved height = zero layout shift -->
+      <div class="ad-slot ad-leaderboard" aria-label="Advertisement">
+        <span class="ad-label">Ad</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1111111111" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+      </div>
 
-        <div class="editor-actions">
-          <button type="button" class="btn-primary" id="copyBtn"><span aria-hidden="true">▢</span> Copy formatted post</button>
-          <button type="button" class="btn-secondary" id="undoBtn" title="Undo (Ctrl/Cmd+Z)" disabled>↶ Undo</button>
-          <button type="button" class="btn-secondary" id="redoBtn" title="Redo (Ctrl/Cmd+Shift+Z)" disabled>↷ Redo</button>
-          <button type="button" class="text-action" id="clearBtn">Clear draft</button>
-        </div>
-        <p class="editor-note" id="copyFeedback" aria-live="polite">Formatting uses Unicode characters where possible, so styles can carry over when pasted into LinkedIn.</p>
-      </section>
+      <label class="sr-only" for="postInput">Write your LinkedIn post</label>
+      <textarea id="postInput" class="post-input" maxlength="3000" spellcheck="true" placeholder="Start with a strong opening line…&#10;&#10;Write here. Select text, then pick a style. LinkedIn posts max out at 3,000 characters."></textarea>
 
-      <aside class="preview-panel" aria-labelledby="preview-heading">
-        <div class="panel-heading">
-          <div><p class="panel-kicker">LIVE PREVIEW</p><h2 id="preview-heading">Your post</h2></div>
-          <span class="preview-live"><span></span> Live</span>
+      <div class="meter" aria-hidden="true"><i id="limitBar"></i></div>
+      <div class="editor-meta">
+        <span><strong id="charCount">0</strong>/3000 chars</span>
+        <span><strong id="wordCount">0</strong> words</span>
+        <span><strong id="readTime">0s</strong> read</span>
+        <span id="lineCount">1 line</span>
+      </div>
+
+      <div class="editor-actions">
+        <button type="button" class="btn-primary" id="copyBtn">Copy formatted post</button>
+        <button type="button" class="btn-secondary" id="undoBtn" disabled>↶ Undo</button>
+        <button type="button" class="btn-secondary" id="redoBtn" disabled>↷ Redo</button>
+        <button type="button" class="btn-secondary" id="txtBtn">Export .txt</button>
+        <button type="button" class="text-action" id="clearBtn">Clear draft</button>
+      </div>
+      <label class="badge-opt"><input type="checkbox" id="badgeOpt"> Add a small “Formatted with LinkedIn Text Formatter” footer when copying</label>
+      <p class="editor-note" id="copyFeedback" aria-live="polite">Styles use Unicode characters, so they carry over when pasted into LinkedIn.</p>
+    </section>
+
+    <aside class="preview-panel reveal" aria-labelledby="preview-heading">
+      <div class="panel-heading">
+        <div><p class="panel-kicker">LIVE PREVIEW</p><h2 id="preview-heading">LinkedIn feed</h2></div>
+        <div class="seg" role="group" aria-label="Device">
+          <button type="button" class="seg-btn active" data-device="mobile">Mobile</button>
+          <button type="button" class="seg-btn" data-device="desktop">Desktop</button>
         </div>
-        <div class="preview-card">
-          <div class="preview-profile">
-            <div class="profile-avatar" aria-hidden="true">Y</div>
-            <div><strong>Your name</strong><span>Headline or role goes here</span><small>Just now · <span aria-label="Public">🌐</span></small></div>
-            <span class="linkedin-mark" aria-label="LinkedIn preview">in</span>
-          </div>
-          <div class="preview-content" id="previewContent">Your formatted post will appear here as you write.</div>
-          <div class="preview-engagement"><span>♡ Like</span><span>▢ Comment</span><span>↗ Repost</span><span>➤ Send</span></div>
+      </div>
+      <div class="preview-stage"><div class="preview-card is-mobile" id="previewCard">
+        <div class="preview-profile">
+          <div class="profile-avatar" aria-hidden="true">Y</div>
+          <div class="pp-meta"><strong>Your name</strong><span>Headline or role goes here</span><small>Just now · 🌐</small></div>
+          <span class="linkedin-mark" aria-hidden="true">in</span>
         </div>
-        <div class="preview-tip"><span aria-hidden="true">✦</span><p><strong>Keep it readable.</strong> Use emphasis sparingly and break longer posts into short paragraphs.</p></div>
-        <div class="visual-font-box">
-          <div class="visual-font-title"><div><p class="panel-kicker">EDITOR DISPLAY</p><strong>Preview font</strong></div><span class="font-note">Doesn't change copied text</span></div>
-          <div class="font-options" role="group" aria-label="Preview font">
-            <button type="button" class="font-option active" data-font="inherit">Default</button>
-            <button type="button" class="font-option" data-font="serif">Serif</button>
-            <button type="button" class="font-option" data-font="mono">Mono</button>
-          </div>
-        </div>
-      </aside>
+        <div class="preview-content is-empty" id="previewContent">Your post will appear here as you write.</div>
+        <button type="button" class="see-more" id="seeMore" hidden>…see more</button>
+        <div class="preview-engagement"><span>👍 Like</span><span>💬 Comment</span><span>🔁 Repost</span><span>➤ Send</span></div>
+      </div></div>
+
+      <div class="score-card">
+        <div class="score-ring" id="scoreRing" style="--s:0"><b id="scoreNum">0</b></div>
+        <div><p class="panel-kicker">HOOK STRENGTH</p><strong id="scoreLabel">Start writing</strong><p class="score-tip" id="scoreTip">Your first line decides who clicks “see more”.</p></div>
+      </div>
+      <div class="tag-box"><p class="panel-kicker">HASHTAG IDEAS</p><div class="tag-list" id="tagList"></div></div>
+    </aside>
+  </div>
+
+  <section class="library reveal" aria-labelledby="lib-heading">
+    <div class="panel-heading"><div><p class="panel-kicker">HOOK &amp; CTA LIBRARY</p><h2 id="lib-heading">Click any line to insert it</h2></div>
+      <div class="seg" role="tablist"><button class="seg-btn active" data-tab="hooks">Hooks</button><button class="seg-btn" data-tab="templates">Templates</button><button class="seg-btn" data-tab="ctas">CTAs</button></div></div>
+    <div class="lib-grid" id="libGrid"></div>
+    <div class="ad-slot ad-native" aria-label="Advertisement">
+      <span class="ad-label">Ad</span>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="2222222222" data-ad-format="fluid" data-ad-layout-key="-fb+5w+4e-db+86"></ins>
     </div>
+  </section>
 
-    <section class="image-tools" aria-labelledby="image-heading">
-      <div class="image-tools-intro">
-        <p class="panel-kicker">OPTIONAL VISUAL</p>
-        <h2 id="image-heading">Find a post image</h2>
-        <p>Open a stock-photo search, choose an image, and download it from the provider. Add it to your LinkedIn post manually.</p>
-      </div>
-      <div class="image-provider-grid">
-        <a class="provider-card" href="https://unsplash.com/s/photos/linkedin-professional" target="_blank" rel="noopener noreferrer">
-          <span class="provider-icon unsplash-icon">U</span><span><strong>Search Unsplash</strong><small>Free stock photography</small></span><span class="provider-arrow">↗</span>
-        </a>
-        <a class="provider-card" href="https://www.pexels.com/search/business/" target="_blank" rel="noopener noreferrer">
-          <span class="provider-icon pexels-icon">P</span><span><strong>Search Pexels</strong><small>Free photos and videos</small></span><span class="provider-arrow">↗</span>
-        </a>
-      </div>
-      <p class="image-note">Image search opens in a new tab. Review each provider's license and download terms. API-powered search and in-tool downloads are not enabled in this static version because a private API key must not be exposed in browser code.</p>
-    </section>
+  <section class="image-tools reveal" aria-labelledby="image-heading">
+    <div class="image-tools-intro"><p class="panel-kicker">OPTIONAL VISUAL</p><h2 id="image-heading">Find a post image</h2><p>Search free stock photos, download from the provider and attach it in LinkedIn. Check each license.</p></div>
+    <div class="image-provider-grid">
+      <a class="provider-card" href="https://unsplash.com/s/photos/linkedin-professional" target="_blank" rel="noopener noreferrer"><span class="provider-icon unsplash-icon">U</span><span><strong>Search Unsplash</strong><small>Free stock photography</small></span><span class="provider-arrow">↗</span></a>
+      <a class="provider-card" href="https://www.pexels.com/search/business/" target="_blank" rel="noopener noreferrer"><span class="provider-icon pexels-icon">P</span><span><strong>Search Pexels</strong><small>Free photos and videos</small></span><span class="provider-arrow">↗</span></a>
+    </div>
+  </section>
 
-    <section class="formatter-help">
-      <h2>How to use the formatter</h2>
-      <div class="help-grid">
-        <article><span>01</span><h3>Write naturally</h3><p>Draft your post in the editor. Your work is saved in this browser automatically.</p></article>
-        <article><span>02</span><h3>Emphasize key lines</h3><p>Select text and apply Unicode styles. You can also add emojis from the picker.</p></article>
-        <article><span>03</span><h3>Copy and publish</h3><p>Copy your post and paste it into LinkedIn. Check the final result before publishing.</p></article>
-      </div>
-      <p class="compatibility-note">Note: Unicode styling is not the same as semantic bold or italic. Some screen readers, languages, and characters may not be supported by every style. Use it sparingly for accessibility.</p>
-    </section>
+  <section class="formatter-help reveal">
+    <h2>How to use the LinkedIn text formatter</h2>
+    <div class="help-grid">
+      <article><span>01</span><h3>Write your post</h3><p>Draft in the editor. It autosaves in this browser.</p></article>
+      <article><span>02</span><h3>Style the hook</h3><p>Select text, apply bold, italic or script, and check the preview and hook score.</p></article>
+      <article><span>03</span><h3>Copy to LinkedIn</h3><p>One click copy, then paste into your LinkedIn post, comment or headline.</p></article>
+    </div>
+    <h3 class="faq-h">FAQ</h3>
+    <details><summary>How does a LinkedIn text formatter work?</summary><p>LinkedIn has no native bold or italic. This tool swaps normal letters for look-alike Unicode characters, so the styling survives copy and paste.</p></details>
+    <details><summary>Does Unicode bold hurt accessibility or search?</summary><p>Screen readers can read styled characters poorly and LinkedIn search does not index them as normal words. Style short hooks and headings only, and keep keywords in plain text.</p></details>
+    <details><summary>Where does LinkedIn cut off a post?</summary><p>Around the first 3 lines (about 140 characters on mobile, 210 on desktop). The preview approximates this; LinkedIn can change it.</p></details>
+  </section>
+</main>
 
-  </main>
-  <footer class="formatter-footer">
-    <a class="footer-brand-link" href="../../index.html">CLIR</a>
-    <span>Your draft is stored locally on this device.</span>
-    <a href="../index.html">More tools ↗</a>
-  </footer>
-  <script src="./formatter.js" defer></script>
+<footer class="formatter-footer">
+  <a class="footer-brand-link" href="../../index.html">CLIR</a>
+  <span>Your draft is stored locally on this device.</span>
+  <a href="../index.html">More tools ↗</a>
+</footer>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script src="./formatter.js" defer></script>
 </body>
 </html>
