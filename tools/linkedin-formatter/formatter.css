@@ -53,7 +53,7 @@ html[data-theme="dark"]{--f-bg:#0f1117;--f-surface:#171a22;--f-soft:#1d212b;--f-
 .emoji-grid button{border:0;border-radius:7px;background:transparent;font-size:20px;padding:6px 0;transition:transform .15s,background .15s}.emoji-grid button:hover{background:var(--f-soft);transform:scale(1.25)}
 
 /* ads: space is reserved up front so nothing shifts when they load */
-.ad-slot{position:relative;margin:12px 0;border:1px dashed var(--f-border);border-radius:12px;background:var(--f-soft);overflow:hidden;contain:layout paint}
+.ad-slot{display:none;position:relative;margin:12px 0;border:1px dashed var(--f-border);border-radius:12px;background:var(--f-soft);overflow:hidden;contain:layout paint}
 .ad-leaderboard{min-height:100px}.ad-native{min-height:140px;margin-top:20px}
 .ad-label{position:absolute;top:4px;right:8px;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--f-muted)}
 .ad-slot ins{min-height:inherit}
@@ -142,3 +142,5 @@ html[data-theme="dark"]{--f-bg:#0f1117;--f-surface:#171a22;--f-soft:#1d212b;--f-
 @media(max-width:768px){.formatter-page{width:min(100% - 28px,680px);padding-top:100px}.editor-panel,.preview-panel,.library,.image-tools{padding:17px;border-radius:16px}.post-input{min-height:260px}.format-btn{min-width:40px}.format-btn kbd{display:none}.format-btn{height:40px}.formatter-page .btn-primary{flex:1 1 100%}.text-action{margin-left:0}.help-grid{grid-template-columns:1fr;gap:17px}.emoji-grid{grid-template-columns:repeat(8,1fr)}.formatter-footer{flex-wrap:wrap}.preview-stage{padding:10px}}
 @media(prefers-reduced-motion:reduce){.formatter-page *,.reveal,.formatter-intro h1 em{animation:none!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
 @property --s{syntax:"<number>";inherits:false;initial-value:0}
+
+.ad-slot.is-live{display:block}

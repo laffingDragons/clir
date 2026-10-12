@@ -218,8 +218,26 @@
   const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .08 }) : null;
   document.querySelectorAll(".reveal").forEach(el => io ? io.observe(el) : el.classList.add("in"));
 
-  /* ads: init each slot once; fail silently so layout never breaks */
-  window.addEventListener("load", () => document.querySelectorAll("ins.adsbygoogle").forEach(() => { try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch {} }));
+  /* ads: only run with a real AdSense ID; hide slots on missing ID, blocked script (ad blocker) or no fill */
+  (function initAds() {
+    const slots = [...document.querySelectorAll(".ad-slot")];
+    const drop = s => s.remove();
+    const ins = s => s.querySelector("ins.adsbygoogle");
+    const valid = s => { const i = ins(s); return i && /^ca-pub-\d{10,}$/.test(i.dataset.adClient || "") && /^\d{6,}$/.test(i.dataset.adSlot || ""); };
+    const ready = slots.filter(s => valid(s) || (drop(s), false));
+    if (!ready.length) return;
+    const client = ins(ready[0]).dataset.adClient;
+    ready.forEach(s => {
+      s.classList.add("is-live");
+      new MutationObserver(() => { if (ins(s)?.dataset.adStatus === "unfilled") drop(s); }).observe(ins(s), { attributes: true, attributeFilter: ["data-ad-status"] });
+    });
+    const sc = document.createElement("script");
+    sc.async = true; sc.crossOrigin = "anonymous";
+    sc.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + encodeURIComponent(client);
+    sc.onerror = () => ready.forEach(drop);
+    sc.onload = () => ready.forEach(s => { try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { drop(s); } });
+    window.addEventListener("load", () => document.head.appendChild(sc));
+  })();
 
   /* init */
   try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) { if (typeof s.text === "string") input.value = s.text; $("badgeOpt").checked = !!s.badge; } } catch {}
