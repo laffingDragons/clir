@@ -1,0 +1,70 @@
+/* Scoped styles for the CLIR tools directory. */
+.tools-page {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 132px 0 32px;
+  color: var(--text-primary, #1a1d24);
+}
+.tools-page > section { max-width: none; margin: 0; padding-left: 0; padding-right: 0; }
+.clir-nav { position: fixed; }
+.clir-nav .nav-links a[aria-current="page"] { color: var(--text-primary, #1a1d24); }
+.tools-nav-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 999px;
+  background: var(--text-primary, #1a1d24); color: #fff;
+  text-decoration: none; font-size: 13px; font-weight: 600;
+}
+.tools-hero { padding: 54px 0 76px; max-width: 760px; }
+.eyebrow, .section-kicker {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
+  color: var(--text-secondary, #5a6070);
+}
+.eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+.tools-hero h1 {
+  margin: 24px 0 22px; font: 400 clamp(48px, 7vw, 84px)/.99 var(--font-display, Georgia, serif);
+  letter-spacing: -1.7px;
+}
+.tools-hero h1 em { color: var(--accent, #4a6cf7); }
+.tools-lede { max-width: 520px; color: var(--text-secondary, #5a6070); font-size: 17px; }
+.tool-grid-section { padding: 34px 0 76px; border-top: 1px solid rgba(26,29,36,.1); }
+.tools-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.tools-section-heading h2 { margin: 8px 0 0; font-size: clamp(28px, 4vw, 38px); }
+.tool-count { color: var(--text-muted, #8a92a3); font-size: 12px; }
+.tool-card {
+  display: flex; flex-direction: column; min-height: 300px;
+  padding: 28px; max-width: 440px; text-decoration: none; color: inherit;
+  background: var(--surface-raised, #fff); border: 1px solid rgba(26,29,36,.08);
+  border-radius: 22px; box-shadow: 0 10px 35px rgba(26,29,36,.045);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.tool-card:hover { transform: translateY(-4px); border-color: rgba(74,108,247,.3); box-shadow: 0 18px 44px rgba(26,29,36,.09); }
+.tool-card-top, .tool-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tool-icon {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 13px;
+  background: #e8ecff; color: #3156d9; font: 700 20px Arial, sans-serif;
+}
+.tool-status { display: inline-flex; align-items: center; gap: 7px; color: #3d7653; font-size: 11px; font-weight: 700; }
+.tool-status span { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+.tool-card h3 { margin: 28px 0 10px; font-size: 20px; letter-spacing: -.4px; }
+.tool-card p { color: var(--text-secondary, #5a6070); font-size: 14px; line-height: 1.7; }
+.tool-card-bottom { margin-top: auto; padding-top: 28px; color: var(--text-muted, #8a92a3); font-size: 11px; }
+.tool-arrow { font-size: 21px; color: var(--accent, #4a6cf7); }
+.tools-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  border-top: 1px solid rgba(26,29,36,.1); padding: 26px 0 10px;
+  color: var(--text-muted, #8a92a3); font-size: 12px;
+}
+.tools-footer a { color: var(--text-secondary, #5a6070); text-decoration: none; }
+.tools-footer .footer-brand-link { color: var(--text-primary, #1a1d24); font-size: 16px; font-weight: 700; }
+@media (max-width: 768px) {
+  .tools-page { width: min(100% - 32px, 640px); padding-top: 104px; }
+  .tools-hero { padding: 44px 0 54px; }
+  .tools-hero h1 { letter-spacing: -1px; }
+  .tools-nav-cta { font-size: 12px; padding: 9px 12px; }
+  .tool-card { min-height: 280px; padding: 22px; }
+  .tools-footer { flex-wrap: wrap; }
+}
+@media (max-width: 420px) {
+  .tools-nav-cta { display: none; }
+}
